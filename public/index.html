@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Raqamli Mahalla</title>
+
+  <style>
+
+    body{
+      font-family: Arial;
+      background:#f2f2f2;
+      padding:40px;
+    }
+
+    .box{
+      background:white;
+      padding:20px;
+      border-radius:10px;
+      max-width:500px;
+      margin:auto;
+    }
+
+    input, button{
+      width:100%;
+      padding:10px;
+      margin-top:10px;
+    }
+
+    button{
+      background:green;
+      color:white;
+      border:none;
+      cursor:pointer;
+    }
+
+    .delete-btn{
+      background:red;
+    }
+
+    .approve-btn{
+      background:blue;
+    }
+
+    .item{
+      background:#eee;
+      padding:10px;
+      margin-top:10px;
+      border-radius:5px;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="box">
+
+    <h1>Ariza yuborish</h1>
+
+    <input
+      type="text"
+      id="name"
+      placeholder="Ismingiz"
+    >
+
+    <input
+      type="text"
+      id="type"
+      placeholder="Ariza turi"
+    >
+
+    <button onclick="sendAriza()">
+      Yuborish
+    </button>
+
+    <p id="result"></p>
+
+    <hr>
+
+    <h2>Arizalar</h2>
+
+    <div id="list"></div>
+
+  </div>
+
+  <script>
+
+    // chiqarish
+    async function loadArizalar(){
+
+      const response = await fetch('/ariza');
+
+      const data = await response.json();
+
+      const list =
+      document.getElementById('list');
+
+      list.innerHTML = '';
+
+      data.forEach(item => {
+
+        list.innerHTML += `
+          <div class="item">
+
+            <b>${item.name}</b>
+            - ${item.type}
+            (${item.status})
+
+            <button
+              class="approve-btn"
+              onclick="approveAriza(${item.id})"
+            >
+              Tasdiqlash
+            </button>
+
+            <button
+              class="delete-btn"
+              onclick="deleteAriza(${item.id})"
+            >
+              O‘chirish
+            </button>
+
+          </div>
+        `;
+
+      });
+
+    }
+
+    // yuborish
+    async function sendAriza(){
+
+      const name =
+      document.getElementById('name').value;
+
+      const type =
+      document.getElementById('type').value;
+
+      const response = await fetch(
+        '/ariza',
+        {
+          method:'POST',
+
+          headers:{
+            'Content-Type':'application/json'
+          },
+
+          body:JSON.stringify({
+            name,
+            type
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      document.getElementById('result')
+      .innerText = data.message;
+
+      loadArizalar();
+
+    }
+
+    // tasdiqlash
+    async function approveAriza(id){
+
+      await fetch(
+        '/ariza/' + id,
+        {
+          method:'PUT'
+        }
+      );
+
+      loadArizalar();
+
+    }
+
+    // o‘chirish
+    async function deleteAriza(id){
+
+      await fetch(
+        '/ariza/' + id,
+        {
+          method:'DELETE'
+        }
+      );
+
+      loadArizalar();
+
+    }
+
+    loadArizalar();
+
+  </script>
+
+</body>
+</html>
