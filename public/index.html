@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Raqamli Mahalla</title>
 
   <style>
+
     body{
       margin:0;
       font-family:Arial;
@@ -17,7 +19,7 @@
       color:white;
       padding:20px;
       text-align:center;
-      font-size:28px;
+      font-size:30px;
       font-weight:bold;
     }
 
@@ -42,6 +44,7 @@
       border-radius:8px;
       border:1px solid #ccc;
       font-size:16px;
+      box-sizing:border-box;
     }
 
     button{
@@ -59,28 +62,41 @@
       width:100%;
     }
 
-    .delete{
-      background:red;
-      color:white;
-    }
-
     .approve{
       background:green;
       color:white;
       margin-right:10px;
     }
 
+    .delete{
+      background:red;
+      color:white;
+    }
+
     .ariza{
-      background:#fff;
+      background:white;
       padding:15px;
       border-radius:10px;
       margin-top:15px;
       box-shadow:0 2px 5px rgba(0,0,0,0.1);
     }
 
-    h2{
-      margin-top:0;
+    #login{
+      max-width:400px;
+      margin:80px auto;
+      background:white;
+      padding:30px;
+      border-radius:12px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+      text-align:center;
     }
+
+    #login button{
+      width:100%;
+      background:#2563eb;
+      color:white;
+    }
+
   </style>
 </head>
 
@@ -90,9 +106,22 @@
   Raqamli Mahalla
 </header>
 
-<div class="container">
+<div id="login">
+
+  <h2>Admin Login</h2>
+
+  <input type="password" id="parol" placeholder="Parol">
+
+  <button onclick="kirish()">
+    Kirish
+  </button>
+
+</div>
+
+<div class="container" id="asosiy" style="display:none;">
 
   <div class="card">
+
     <h2>Ariza yuborish</h2>
 
     <input type="text" id="ism" placeholder="Ismingiz">
@@ -106,12 +135,15 @@
     <button class="send" onclick="yuborish()">
       Yuborish
     </button>
+
   </div>
 
   <div class="card">
+
     <h2>Arizalar</h2>
 
     <div id="royxat"></div>
+
   </div>
 
 </div>
@@ -120,7 +152,26 @@
 
 let arizalar = [];
 
+function kirish(){
+
+  let parol = document.getElementById("parol").value;
+
+  if(parol === "1234"){
+
+    document.getElementById("login").style.display = "none";
+
+    document.getElementById("asosiy").style.display = "block";
+
+  }else{
+
+    alert("Parol noto'g'ri");
+
+  }
+
+}
+
 function chiqarish(){
+
   let royxat = document.getElementById("royxat");
 
   royxat.innerHTML = "";
@@ -129,6 +180,7 @@ function chiqarish(){
 
     royxat.innerHTML += `
       <div class="ariza">
+
         <h3>${ariza.ism}</h3>
 
         <p>Tur: ${ariza.tur}</p>
@@ -142,14 +194,18 @@ function chiqarish(){
         <button class="delete" onclick="ochirish(${ariza.id})">
           O'chirish
         </button>
+
       </div>
     `;
+
   });
+
 }
 
 function yuborish(){
 
   let ism = document.getElementById("ism").value;
+
   let tur = document.getElementById("tur").value;
 
   fetch("/api/ariza",{
