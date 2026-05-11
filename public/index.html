@@ -1,199 +1,217 @@
 <!DOCTYPE html>
 <html lang="uz">
-
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Raqamli Mahalla</title>
 
   <style>
-
     body{
-      font-family: Arial;
-      background:#f2f2f2;
-      padding:40px;
+      margin:0;
+      font-family:Arial;
+      background:#f4f6f9;
     }
 
-    .box{
+    header{
+      background:#2563eb;
+      color:white;
+      padding:20px;
+      text-align:center;
+      font-size:28px;
+      font-weight:bold;
+    }
+
+    .container{
+      max-width:700px;
+      margin:auto;
+      padding:20px;
+    }
+
+    .card{
       background:white;
       padding:20px;
-      border-radius:10px;
-      max-width:500px;
-      margin:auto;
+      border-radius:12px;
+      margin-bottom:20px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
     }
 
-    input, button{
+    input, select{
       width:100%;
-      padding:10px;
+      padding:12px;
       margin-top:10px;
+      border-radius:8px;
+      border:1px solid #ccc;
+      font-size:16px;
     }
 
     button{
+      padding:12px 18px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:16px;
+      margin-top:10px;
+    }
+
+    .send{
+      background:#2563eb;
+      color:white;
+      width:100%;
+    }
+
+    .delete{
+      background:red;
+      color:white;
+    }
+
+    .approve{
       background:green;
       color:white;
-      border:none;
-      cursor:pointer;
+      margin-right:10px;
     }
 
-    .delete-btn{
-      background:red;
+    .ariza{
+      background:#fff;
+      padding:15px;
+      border-radius:10px;
+      margin-top:15px;
+      box-shadow:0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .approve-btn{
-      background:blue;
+    h2{
+      margin-top:0;
     }
-
-    .item{
-      background:#eee;
-      padding:10px;
-      margin-top:10px;
-      border-radius:5px;
-    }
-
   </style>
-
 </head>
 
 <body>
 
-  <div class="box">
+<header>
+  Raqamli Mahalla
+</header>
 
-    <h1>Ariza yuborish</h1>
+<div class="container">
 
-    <input
-      type="text"
-      id="name"
-      placeholder="Ismingiz"
-    >
+  <div class="card">
+    <h2>Ariza yuborish</h2>
 
-    <input
-      type="text"
-      id="type"
-      placeholder="Ariza turi"
-    >
+    <input type="text" id="ism" placeholder="Ismingiz">
 
-    <button onclick="sendAriza()">
+    <select id="tur">
+      <option>Nafaqa</option>
+      <option>Yordam</option>
+      <option>Subsidiya</option>
+    </select>
+
+    <button class="send" onclick="yuborish()">
       Yuborish
     </button>
-
-    <p id="result"></p>
-
-    <hr>
-
-    <h2>Arizalar</h2>
-
-    <div id="list"></div>
-
   </div>
 
-  <script>
+  <div class="card">
+    <h2>Arizalar</h2>
 
-    // chiqarish
-    async function loadArizalar(){
+    <div id="royxat"></div>
+  </div>
 
-      const response = await fetch('/ariza');
+</div>
 
-      const data = await response.json();
+<script>
 
-      const list =
-      document.getElementById('list');
+let arizalar = [];
 
-      list.innerHTML = '';
+function chiqarish(){
+  let royxat = document.getElementById("royxat");
 
-      data.forEach(item => {
+  royxat.innerHTML = "";
 
-        list.innerHTML += `
-          <div class="item">
+  arizalar.forEach(ariza => {
 
-            <b>${item.name}</b>
-            - ${item.type}
-            (${item.status})
+    royxat.innerHTML += `
+      <div class="ariza">
+        <h3>${ariza.ism}</h3>
 
-            <button
-              class="approve-btn"
-              onclick="approveAriza(${item.id})"
-            >
-              Tasdiqlash
-            </button>
+        <p>Tur: ${ariza.tur}</p>
 
-            <button
-              class="delete-btn"
-              onclick="deleteAriza(${item.id})"
-            >
-              O‘chirish
-            </button>
+        <p>Status: ${ariza.status}</p>
 
-          </div>
-        `;
+        <button class="approve" onclick="tasdiqlash(${ariza.id})">
+          Tasdiqlash
+        </button>
 
-      });
+        <button class="delete" onclick="ochirish(${ariza.id})">
+          O'chirish
+        </button>
+      </div>
+    `;
+  });
+}
 
-    }
+function yuborish(){
 
-    // yuborish
-    async function sendAriza(){
+  let ism = document.getElementById("ism").value;
+  let tur = document.getElementById("tur").value;
 
-      const name =
-      document.getElementById('name').value;
+  fetch("/api/ariza",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      ism,
+      tur
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
 
-      const type =
-      document.getElementById('type').value;
+    alert(data.message);
 
-      const response = await fetch(
-        '/ariza',
-        {
-          method:'POST',
+    yuklash();
 
-          headers:{
-            'Content-Type':'application/json'
-          },
+  });
 
-          body:JSON.stringify({
-            name,
-            type
-          })
-        }
-      );
+}
 
-      const data = await response.json();
+function yuklash(){
 
-      document.getElementById('result')
-      .innerText = data.message;
+  fetch("/api/arizalar")
+  .then(res => res.json())
+  .then(data => {
 
-      loadArizalar();
+    arizalar = data;
 
-    }
+    chiqarish();
 
-    // tasdiqlash
-    async function approveAriza(id){
+  });
 
-      await fetch(
-        '/ariza/' + id,
-        {
-          method:'PUT'
-        }
-      );
+}
 
-      loadArizalar();
+function ochirish(id){
 
-    }
+  fetch("/api/ariza/" + id,{
+    method:"DELETE"
+  })
+  .then(() => {
+    yuklash();
+  });
 
-    // o‘chirish
-    async function deleteAriza(id){
+}
 
-      await fetch(
-        '/ariza/' + id,
-        {
-          method:'DELETE'
-        }
-      );
+function tasdiqlash(id){
 
-      loadArizalar();
+  fetch("/api/ariza/" + id,{
+    method:"PUT"
+  })
+  .then(() => {
+    yuklash();
+  });
 
-    }
+}
 
-    loadArizalar();
+yuklash();
 
-  </script>
+</script>
 
 </body>
 </html>
