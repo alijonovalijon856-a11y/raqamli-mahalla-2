@@ -12,15 +12,22 @@
       margin:0;
       font-family:Arial;
       background:#f4f6f9;
+      transition:0.3s;
     }
 
     header{
       background:#2563eb;
       color:white;
       padding:20px;
-      text-align:center;
       font-size:30px;
       font-weight:bold;
+
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+
+      padding-left:30px;
+      padding-right:30px;
     }
 
     .container{
@@ -35,6 +42,7 @@
       border-radius:12px;
       margin-bottom:20px;
       box-shadow:0 4px 10px rgba(0,0,0,0.1);
+      transition:0.3s;
     }
 
     input, select{
@@ -97,13 +105,50 @@
       color:white;
     }
 
+    .dark{
+      background:#111827;
+      color:white;
+    }
+
+    .dark .card{
+      background:#1f2937;
+      color:white;
+    }
+
+    .dark .ariza{
+      background:#374151;
+      color:white;
+    }
+
+    .dark input,
+    .dark select{
+      background:#374151;
+      color:white;
+      border:none;
+    }
+
+    #darkBtn{
+      background:white;
+      border:none;
+      border-radius:8px;
+      padding:10px;
+      cursor:pointer;
+      font-size:18px;
+    }
+
   </style>
 </head>
 
 <body>
 
 <header>
-  Raqamli Mahalla
+
+  🏛 Raqamli Mahalla
+
+  <button onclick="darkMode()" id="darkBtn">
+    🌙
+  </button>
+
 </header>
 
 <div id="login">
@@ -151,6 +196,12 @@
 <script>
 
 let arizalar = [];
+
+function darkMode(){
+
+  document.body.classList.toggle("dark");
+
+}
 
 function kirish(){
 
