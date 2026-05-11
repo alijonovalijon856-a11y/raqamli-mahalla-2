@@ -167,6 +167,18 @@
 
   <div class="card">
 
+    <h2>📊 Statistika</h2>
+
+    <p>Jami arizalar: <span id="jami">0</span></p>
+
+    <p>Tasdiqlangan: <span id="tasdiq">0</span></p>
+
+    <p>Kutilmoqda: <span id="kutish">0</span></p>
+
+  </div>
+
+  <div class="card">
+
     <h2>Ariza yuborish</h2>
 
     <input type="text" id="ism" placeholder="Ismingiz">
@@ -227,7 +239,17 @@ function chiqarish(){
 
   royxat.innerHTML = "";
 
+  let tasdiq = 0;
+
+  let kutish = 0;
+
   arizalar.forEach(ariza => {
+
+    if(ariza.status === "approved"){
+      tasdiq++;
+    }else{
+      kutish++;
+    }
 
     royxat.innerHTML += `
       <div class="ariza">
@@ -250,6 +272,12 @@ function chiqarish(){
     `;
 
   });
+
+  document.getElementById("jami").innerText = arizalar.length;
+
+  document.getElementById("tasdiq").innerText = tasdiq;
+
+  document.getElementById("kutish").innerText = kutish;
 
 }
 
