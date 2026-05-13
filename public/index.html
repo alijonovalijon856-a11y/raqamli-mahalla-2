@@ -95,9 +95,10 @@ button{
   margin-top:15px;
 }
 
-#login{
+#login,
+#userLogin{
   max-width:400px;
-  margin:80px auto;
+  margin:40px auto;
   background:white;
   padding:30px;
   border-radius:12px;
@@ -111,7 +112,8 @@ button{
 
 .dark .card,
 .dark .ariza,
-.dark #login{
+.dark #login,
+.dark #userLogin{
   background:#1f2937;
   color:white;
 }
@@ -154,7 +156,26 @@ button{
 
 </header>
 
-<div id="login">
+<div id="userLogin">
+
+<h2>👤 Fuqaro kabineti</h2>
+
+<input
+type="text"
+id="userName"
+placeholder="Ismingizni kiriting"
+>
+
+<button
+class="send"
+onclick="foydalanuvchiKirish()"
+>
+Kirish
+</button>
+
+</div>
+
+<div id="login" style="display:none;">
 
 <h2 id="loginTitle">Admin Login</h2>
 
@@ -220,7 +241,7 @@ Yuborish
 
 <div class="card">
 
-<h2 id="listTitle">Arizalar</h2>
+<h2 id="listTitle">Mening arizalarim</h2>
 
 <div id="royxat"></div>
 
@@ -248,6 +269,8 @@ let arizalar = [];
 
 let currentLang = "uz";
 
+let currentUser = "";
+
 const langs = {
 
 uz:{
@@ -260,7 +283,7 @@ pending:"Kutilmoqda",
 sendApplication:"Ariza yuborish",
 name:"Ismingiz",
 send:"Yuborish",
-apps:"Arizalar",
+apps:"Mening arizalarim",
 type:"Tur",
 status:"Status",
 approve:"Tasdiqlash",
@@ -282,7 +305,7 @@ pending:"Ожидается",
 sendApplication:"Отправить заявку",
 name:"Ваше имя",
 send:"Отправить",
-apps:"Заявки",
+apps:"Мои заявки",
 type:"Тип",
 status:"Статус",
 approve:"Подтвердить",
@@ -304,7 +327,7 @@ pending:"Pending",
 sendApplication:"Send Application",
 name:"Your name",
 send:"Send",
-apps:"Applications",
+apps:"My applications",
 type:"Type",
 status:"Status",
 approve:"Approve",
@@ -320,6 +343,30 @@ choose:"📎 Choose file"
 
 function darkMode(){
 document.body.classList.toggle("dark");
+}
+
+function foydalanuvchiKirish(){
+
+let name = document
+.getElementById("userName")
+.value;
+
+if(name === ""){
+
+alert("Ism kiriting");
+
+return;
+
+}
+
+currentUser = name;
+
+document.getElementById("userLogin")
+.style.display = "none";
+
+document.getElementById("login")
+.style.display = "block";
+
 }
 
 function fileName(){
@@ -409,6 +456,10 @@ let pending = 0;
 
 arizalar.forEach(ariza => {
 
+if(ariza.user !== currentUser){
+return;
+}
+
 if(ariza.status === "approved"){
 approved++;
 }else{
@@ -463,6 +514,7 @@ headers:{
 body:JSON.stringify({
 ism,
 tur,
+user:currentUser,
 hujjat:hujjat ? hujjat.name : "Yuklanmagan"
 })
 })
@@ -529,7 +581,6 @@ javob = `📌 Nafaqa olish uchun kerak:
 ✅ Pasport
 ✅ Daromad ma'lumoti
 ✅ Oilaviy holat ma'lumoti
-✅ Mahalla tavsiyasi
 
 📍 Platforma orqali online yuborishingiz mumkin.`;
 
@@ -541,7 +592,6 @@ javob = `📌 Subsidiya uchun kerak:
 ✅ Pasport
 ✅ Uy joy hujjati
 ✅ Daromad ma'lumoti
-✅ Ariza formasi
 
 📍 Barcha hujjatlarni shu platformaga yuklang.`;
 
@@ -552,7 +602,6 @@ javob = `📌 Moddiy yordam uchun kerak:
 
 ✅ Pasport
 ✅ Oilaviy ma'lumot
-✅ Mahalla tasdig'i
 
 📍 Arizani online yuborishingiz mumkin.`;
 
