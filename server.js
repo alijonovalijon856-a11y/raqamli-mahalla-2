@@ -12,13 +12,13 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect(
-"mongodb+srv://admin:mehri18352@cluster0.87jmenr.mongodb.net/?appName=Cluster0"
+"mongodb+srv://admin:mehri18352@cluster0.87jmenr.mongodb.net/raqamliMahalla?retryWrites=true&w=majority&appName=Cluster0"
 )
 .then(() => {
-console.log("MongoDB connected");
+console.log("✅ MongoDB connected");
 })
 .catch((err) => {
-console.log(err);
+console.log("❌ MongoDB error:", err);
 });
 
 const arizaSchema = new mongoose.Schema({
@@ -85,13 +85,25 @@ chatId,
 
 app.get('/api/arizalar', async(req,res)=>{
 
+try{
+
 const arizalar = await Ariza.find();
 
 res.json(arizalar);
 
+}catch(err){
+
+res.status(500).json({
+message:"Xatolik"
+});
+
+}
+
 });
 
 app.post('/api/ariza', async(req,res)=>{
+
+try{
 
 const yangiAriza = new Ariza({
 
@@ -108,9 +120,19 @@ res.json({
 message:"Ariza yuborildi"
 });
 
+}catch(err){
+
+res.status(500).json({
+message:"Saqlashda xatolik"
+});
+
+}
+
 });
 
 app.put('/api/ariza/:id', async(req,res)=>{
+
+try{
 
 await Ariza.findByIdAndUpdate(
 req.params.id,
@@ -123,9 +145,19 @@ res.json({
 message:"Tasdiqlandi"
 });
 
+}catch(err){
+
+res.status(500).json({
+message:"Xatolik"
+});
+
+}
+
 });
 
 app.delete('/api/ariza/:id', async(req,res)=>{
+
+try{
 
 await Ariza.findByIdAndDelete(
 req.params.id
@@ -135,10 +167,18 @@ res.json({
 message:"O'chirildi"
 });
 
+}catch(err){
+
+res.status(500).json({
+message:"Xatolik"
+});
+
+}
+
 });
 
 app.listen(PORT,()=>{
 
-console.log("Server ishladi");
+console.log("🚀 Server ishladi");
 
 });
