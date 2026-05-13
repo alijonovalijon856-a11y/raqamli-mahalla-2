@@ -186,6 +186,8 @@ Kirish
 <option>Subsidiya</option>
 </select>
 
+<input type="file" id="hujjat">
+
 <button class="send" id="sendBtn" onclick="yuborish()">
 Yuborish
 </button>
@@ -372,6 +374,8 @@ royxat.innerHTML += `
 
 <p>${langs[currentLang].status}: ${ariza.status}</p>
 
+<p>📎 Hujjat: ${ariza.hujjat}</p>
+
 <button class="approve" onclick="tasdiqlash(${ariza.id})">
 ${langs[currentLang].approve}
 </button>
@@ -397,6 +401,10 @@ let ism = document.getElementById("ism").value;
 
 let tur = document.getElementById("tur").value;
 
+let hujjat = document
+.getElementById("hujjat")
+.files[0];
+
 fetch("/api/ariza",{
 method:"POST",
 headers:{
@@ -404,7 +412,8 @@ headers:{
 },
 body:JSON.stringify({
 ism,
-tur
+tur,
+hujjat:hujjat ? hujjat.name : "Yuklanmagan"
 })
 })
 .then(res => res.json())
@@ -472,7 +481,7 @@ javob = `📌 Nafaqa olish uchun kerak:
 ✅ Oilaviy holat ma'lumoti
 ✅ Mahalla tavsiyasi
 
-📍 Mahalla idorasiga murojaat qiling.`;
+📍 Platforma orqali online yuborishingiz mumkin.`;
 
 }
 else if(savol.includes("subsidiya")){
@@ -484,7 +493,7 @@ javob = `📌 Subsidiya uchun kerak:
 ✅ Daromad ma'lumoti
 ✅ Ariza formasi
 
-📍 Tuman hokimligiga murojaat qiling.`;
+📍 Barcha hujjatlarni shu platformaga yuklang.`;
 
 }
 else if(savol.includes("yordam")){
@@ -495,7 +504,7 @@ javob = `📌 Moddiy yordam uchun kerak:
 ✅ Oilaviy ma'lumot
 ✅ Mahalla tasdig'i
 
-📍 Mahalla markaziga murojaat qiling.`;
+📍 Arizani online yuborishingiz mumkin.`;
 
 }
 else{
