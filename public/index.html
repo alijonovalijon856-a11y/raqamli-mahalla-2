@@ -196,10 +196,19 @@ Kirish
 📎 Hujjat yuklang
 </label>
 
+<button
+type="button"
+class="send"
+id="chooseBtn"
+onclick="document.getElementById('hujjat').click()"
+>
+📎 Fayl tanlash
+</button>
+
 <input
 type="file"
 id="hujjat"
-style="margin-top:10px;"
+style="display:none;"
 onchange="fileName()"
 >
 
@@ -259,7 +268,8 @@ delete:"O'chirish",
 benefit:"Nafaqa",
 help:"Yordam",
 subsidy:"Subsidiya",
-file:"📎 Hujjat yuklang"
+file:"📎 Hujjat yuklang",
+choose:"📎 Fayl tanlash"
 },
 
 ru:{
@@ -280,7 +290,8 @@ delete:"Удалить",
 benefit:"Пособие",
 help:"Помощь",
 subsidy:"Субсидия",
-file:"📎 Загрузите документ"
+file:"📎 Загрузите документ",
+choose:"📎 Выбрать файл"
 },
 
 en:{
@@ -301,7 +312,8 @@ delete:"Delete",
 benefit:"Allowance",
 help:"Help",
 subsidy:"Subsidy",
-file:"📎 Upload document"
+file:"📎 Upload document",
+choose:"📎 Choose file"
 }
 
 };
@@ -355,6 +367,8 @@ document.getElementById("sendBtn").innerText = t.send;
 document.getElementById("listTitle").innerText = t.apps;
 
 document.getElementById("fileText").innerText = t.file;
+
+document.getElementById("chooseBtn").innerText = t.choose;
 
 document.getElementById("tur").innerHTML = `
 <option>${t.benefit}</option>
