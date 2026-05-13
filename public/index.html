@@ -164,7 +164,7 @@
 
 <header>
 
-  <div class="logo" id="logoText">
+  <div class="logo">
     🏛 Raqamli Mahalla
   </div>
 
@@ -254,6 +254,33 @@
 
 let arizalar = [];
 
+let currentLang = "uz";
+
+const texts = {
+
+  uz:{
+    tur:"Tur",
+    status:"Status",
+    approve:"Tasdiqlash",
+    delete:"O'chirish"
+  },
+
+  ru:{
+    tur:"Тип",
+    status:"Статус",
+    approve:"Подтвердить",
+    delete:"Удалить"
+  },
+
+  en:{
+    tur:"Type",
+    status:"Status",
+    approve:"Approve",
+    delete:"Delete"
+  }
+
+};
+
 function darkMode(){
 
   document.body.classList.toggle("dark");
@@ -261,6 +288,8 @@ function darkMode(){
 }
 
 function til(lang){
+
+  currentLang = lang;
 
   if(lang === "uz"){
 
@@ -294,6 +323,8 @@ function til(lang){
     document.getElementById("sendBtn").innerText = "Send";
 
   }
+
+  chiqarish();
 
 }
 
@@ -338,16 +369,16 @@ function chiqarish(){
 
         <h3>${ariza.ism}</h3>
 
-        <p>Tur: ${ariza.tur}</p>
+        <p>${texts[currentLang].tur}: ${ariza.tur}</p>
 
-        <p>Status: ${ariza.status}</p>
+        <p>${texts[currentLang].status}: ${ariza.status}</p>
 
         <button class="approve" onclick="tasdiqlash(${ariza.id})">
-          Tasdiqlash
+          ${texts[currentLang].approve}
         </button>
 
         <button class="delete" onclick="ochirish(${ariza.id})">
-          O'chirish
+          ${texts[currentLang].delete}
         </button>
 
       </div>
