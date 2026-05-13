@@ -131,6 +131,15 @@ button{
   font-weight:bold;
 }
 
+#notification{
+  margin-top:20px;
+  padding:15px;
+  border-radius:10px;
+  background:#dcfce7;
+  color:#166534;
+  font-weight:bold;
+}
+
 </style>
 </head>
 
@@ -244,6 +253,8 @@ Yuborish
 <h2 id="listTitle">Mening arizalarim</h2>
 
 <div id="royxat"></div>
+
+<div id="notification"></div>
 
 </div>
 
@@ -461,9 +472,17 @@ return;
 }
 
 if(ariza.status === "approved"){
+
 approved++;
+
+document.getElementById("notification")
+.innerText =
+"✅ Arizangiz tasdiqlangan";
+
 }else{
+
 pending++;
+
 }
 
 royxat.innerHTML += `
@@ -523,6 +542,10 @@ hujjat:hujjat ? hujjat.name : "Yuklanmagan"
 
 alert(data.message);
 
+document.getElementById("notification")
+.innerText =
+"📨 Arizangiz yuborildi";
+
 yuklash();
 
 });
@@ -549,7 +572,13 @@ fetch("/api/ariza/" + id,{
 method:"DELETE"
 })
 .then(() => {
+
+document.getElementById("notification")
+.innerText =
+"🗑 Ariza o'chirildi";
+
 yuklash();
+
 });
 
 }
@@ -560,7 +589,13 @@ fetch("/api/ariza/" + id,{
 method:"PUT"
 })
 .then(() => {
+
+document.getElementById("notification")
+.innerText =
+"✅ Arizangiz tasdiqlandi";
+
 yuklash();
+
 });
 
 }
