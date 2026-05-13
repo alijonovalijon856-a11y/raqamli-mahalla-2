@@ -200,6 +200,20 @@ Yuborish
 
 </div>
 
+<div class="card">
+
+<h2>🤖 AI Yordamchi</h2>
+
+<input type="text" id="savol" placeholder="Savol yozing">
+
+<button onclick="javobBer()" class="send">
+Yuborish
+</button>
+
+<div id="javob" style="margin-top:20px;font-weight:bold;"></div>
+
+</div>
+
 </div>
 
 <script>
@@ -437,6 +451,40 @@ method:"PUT"
 .then(() => {
 yuklash();
 });
+
+}
+
+function javobBer(){
+
+let savol = document
+.getElementById("savol")
+.value
+.toLowerCase();
+
+let javob = "";
+
+if(savol.includes("nafaqa")){
+
+  javob = "Nafaqa olish uchun ariza yuborishingiz kerak.";
+
+}
+else if(savol.includes("subsidiya")){
+
+  javob = "Subsidiya uchun mahallaga murojaat qiling.";
+
+}
+else if(savol.includes("yordam")){
+
+  javob = "Yordam bo'limiga ariza yuborishingiz mumkin.";
+
+}
+else{
+
+  javob = "Savolingiz qabul qilindi.";
+
+}
+
+document.getElementById("javob").innerText = javob;
 
 }
 
