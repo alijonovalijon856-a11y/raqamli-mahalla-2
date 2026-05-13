@@ -1,7 +1,6 @@
 const express = require('express');
-
 const path = require('path');
-
+const mongoose = require('mongoose');
 const TelegramBot = require('node-telegram-bot-api');
 
 const app = express();
@@ -12,13 +11,38 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-let arizalar = [];
+mongoose.connect(
+"mongodb+srv://admin:mehri18352@cluster0.87jmenr.mongodb.net/?appName=Cluster0"
+)
+.then(() => {
+console.log("MongoDB connected");
+})
+.catch((err) => {
+console.log(err);
+});
 
-const token = '8849163719:AAEsdTitTyA4e6v7CCD5SSLeRjXvDgjmoao';
+const arizaSchema = new mongoose.Schema({
 
-const bot = new TelegramBot(token, { polling: true });
+ism:String,
+tur:String,
+user:String,
+hujjat:String,
+status:{
+type:String,
+default:"pending"
+}
 
-bot.on('message', (msg) => {
+});
+
+const Ariza = mongoose.model("Ariza", arizaSchema);
+
+const token =
+'8849163719:AAEsdTitTyA4e6v7CCD5SSLeRjXvDgjmoao';
+
+const bot =
+new TelegramBot(token,{ polling:true });
+
+bot.on('message',(msg)=>{
 
 const chatId = msg.chat.id;
 
@@ -59,69 +83,61 @@ chatId,
 
 });
 
-app.get('/api/arizalar', (req, res) => {
+app.get('/api/arizalar', async(req,res)=>{
+
+const arizalar = await Ariza.find();
 
 res.json(arizalar);
 
 });
 
-app.post('/api/ariza', (req, res) => {
+app.post('/api/ariza', async(req,res)=>{
 
-const yangiAriza = {
-id: Date.now(),
-ism: req.body.ism,
-tur: req.body.tur,
-user: req.body.user,
-hujjat: req.body.hujjat,
-status: "pending"
-};
+const yangiAriza = new Ariza({
 
-arizalar.push(yangiAriza);
+ism:req.body.ism,
+tur:req.body.tur,
+user:req.body.user,
+hujjat:req.body.hujjat
+
+});
+
+await yangiAriza.save();
 
 res.json({
-message: "Ariza yuborildi"
+message:"Ariza yuborildi"
 });
 
 });
 
-app.put('/api/ariza/:id', (req, res) => {
+app.put('/api/ariza/:id', async(req,res)=>{
 
-const id = parseInt(req.params.id);
-
-arizalar = arizalar.map(ariza => {
-
-if(ariza.id === id){
-
-return {
-...ariza,
-status: "approved"
-};
-
+await Ariza.findByIdAndUpdate(
+req.params.id,
+{
+status:"approved"
 }
-
-return ariza;
-
-});
+);
 
 res.json({
-message: "Tasdiqlandi"
+message:"Tasdiqlandi"
 });
 
 });
 
-app.delete('/api/ariza/:id', (req, res) => {
+app.delete('/api/ariza/:id', async(req,res)=>{
 
-const id = parseInt(req.params.id);
-
-arizalar = arizalar.filter(ariza => ariza.id !== id);
+await Ariza.findByIdAndDelete(
+req.params.id
+);
 
 res.json({
-message: "O'chirildi"
+message:"O'chirildi"
 });
 
 });
 
-app.listen(PORT, () => {
+app.listen(PORT,()=>{
 
 console.log("Server ishladi");
 
