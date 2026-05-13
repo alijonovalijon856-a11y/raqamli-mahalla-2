@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Raqamli Mahalla</title>
 
   <style>
@@ -19,19 +18,33 @@
       background:#2563eb;
       color:white;
       padding:20px;
-      font-size:30px;
-      font-weight:bold;
-
       display:flex;
       justify-content:space-between;
       align-items:center;
+      flex-wrap:wrap;
+    }
 
-      padding-left:30px;
-      padding-right:30px;
+    .logo{
+      font-size:28px;
+      font-weight:bold;
+    }
+
+    .top-buttons{
+      display:flex;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .top-buttons button{
+      border:none;
+      border-radius:8px;
+      padding:10px 15px;
+      cursor:pointer;
+      font-size:16px;
     }
 
     .container{
-      max-width:700px;
+      max-width:800px;
       margin:auto;
       padding:20px;
     }
@@ -127,13 +140,21 @@
       border:none;
     }
 
-    #darkBtn{
-      background:white;
-      border:none;
-      border-radius:8px;
-      padding:10px;
-      cursor:pointer;
-      font-size:18px;
+    .dark #login{
+      background:#1f2937;
+    }
+
+    @media(max-width:600px){
+
+      header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .top-buttons{
+        margin-top:15px;
+      }
+
     }
 
   </style>
@@ -143,21 +164,39 @@
 
 <header>
 
-  🏛 Raqamli Mahalla
+  <div class="logo" id="logoText">
+    🏛 Raqamli Mahalla
+  </div>
 
-  <button onclick="darkMode()" id="darkBtn">
-    🌙
-  </button>
+  <div class="top-buttons">
+
+    <button onclick="til('uz')">
+      🇺🇿 UZ
+    </button>
+
+    <button onclick="til('ru')">
+      🇷🇺 RU
+    </button>
+
+    <button onclick="til('en')">
+      🇬🇧 EN
+    </button>
+
+    <button onclick="darkMode()">
+      🌙
+    </button>
+
+  </div>
 
 </header>
 
 <div id="login">
 
-  <h2>Admin Login</h2>
+  <h2 id="loginTitle">Admin Login</h2>
 
   <input type="password" id="parol" placeholder="Parol">
 
-  <button onclick="kirish()">
+  <button onclick="kirish()" id="loginBtn">
     Kirish
   </button>
 
@@ -167,19 +206,25 @@
 
   <div class="card">
 
-    <h2>📊 Statistika</h2>
+    <h2 id="statTitle">📊 Statistika</h2>
 
-    <p>Jami arizalar: <span id="jami">0</span></p>
+    <p id="jamiText">
+      Jami arizalar: <span id="jami">0</span>
+    </p>
 
-    <p>Tasdiqlangan: <span id="tasdiq">0</span></p>
+    <p id="tasdiqText">
+      Tasdiqlangan: <span id="tasdiq">0</span>
+    </p>
 
-    <p>Kutilmoqda: <span id="kutish">0</span></p>
+    <p id="kutishText">
+      Kutilmoqda: <span id="kutish">0</span>
+    </p>
 
   </div>
 
   <div class="card">
 
-    <h2>Ariza yuborish</h2>
+    <h2 id="arizaTitle">Ariza yuborish</h2>
 
     <input type="text" id="ism" placeholder="Ismingiz">
 
@@ -189,7 +234,7 @@
       <option>Subsidiya</option>
     </select>
 
-    <button class="send" onclick="yuborish()">
+    <button class="send" onclick="yuborish()" id="sendBtn">
       Yuborish
     </button>
 
@@ -197,7 +242,7 @@
 
   <div class="card">
 
-    <h2>Arizalar</h2>
+    <h2 id="listTitle">Arizalar</h2>
 
     <div id="royxat"></div>
 
@@ -212,6 +257,43 @@ let arizalar = [];
 function darkMode(){
 
   document.body.classList.toggle("dark");
+
+}
+
+function til(lang){
+
+  if(lang === "uz"){
+
+    document.getElementById("loginTitle").innerText = "Admin Login";
+    document.getElementById("loginBtn").innerText = "Kirish";
+    document.getElementById("statTitle").innerText = "📊 Statistika";
+    document.getElementById("arizaTitle").innerText = "Ariza yuborish";
+    document.getElementById("listTitle").innerText = "Arizalar";
+    document.getElementById("sendBtn").innerText = "Yuborish";
+
+  }
+
+  if(lang === "ru"){
+
+    document.getElementById("loginTitle").innerText = "Вход Админа";
+    document.getElementById("loginBtn").innerText = "Войти";
+    document.getElementById("statTitle").innerText = "📊 Статистика";
+    document.getElementById("arizaTitle").innerText = "Отправить заявку";
+    document.getElementById("listTitle").innerText = "Заявки";
+    document.getElementById("sendBtn").innerText = "Отправить";
+
+  }
+
+  if(lang === "en"){
+
+    document.getElementById("loginTitle").innerText = "Admin Login";
+    document.getElementById("loginBtn").innerText = "Login";
+    document.getElementById("statTitle").innerText = "📊 Statistics";
+    document.getElementById("arizaTitle").innerText = "Send Application";
+    document.getElementById("listTitle").innerText = "Applications";
+    document.getElementById("sendBtn").innerText = "Send";
+
+  }
 
 }
 
