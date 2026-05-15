@@ -89,6 +89,11 @@ background:#1f2937;
 color:white;
 }
 
+.file-link{
+display:block;
+margin-top:10px;
+}
+
 </style>
 </head>
 
@@ -160,6 +165,8 @@ Jami arizalar:
 <option>Subsidiya</option>
 
 </select>
+
+<input type="file" id="hujjat">
 
 <button class="send" onclick="yuborish()">
 Yuborish
@@ -271,22 +278,24 @@ return;
 
 }
 
+const formData = new FormData();
+
+formData.append(
+'hujjat',
+document.getElementById('hujjat').files[0]
+);
+
+formData.append('ism', ism);
+
+formData.append('tur', tur);
+
+formData.append('user', currentUser);
+
 fetch('/api/ariza',{
 
 method:'POST',
 
-headers:{
-'Content-Type':'application/json'
-},
-
-body:JSON.stringify({
-
-ism:ism,
-tur:tur,
-user:currentUser,
-hujjat:'Yuklanmagan'
-
-})
+body:formData
 
 })
 .then(res=>res.json())
@@ -321,7 +330,13 @@ html += `
 
 Tur: ${data[i].tur}<br>
 
-Status: ${data[i].status}
+Status: ${data[i].status}<br>
+
+<a class="file-link"
+href="${data[i].hujjat}"
+target="_blank">
+📎 Hujjatni ochish
+</a>
 
 </div>
 
