@@ -238,6 +238,9 @@ if(data.user){
 currentUser =
 document.getElementById('loginUser').value;
 
+document.getElementById('authBox')
+.style.display = "none";
+
 document.getElementById('royxat')
 .innerHTML = "";
 
@@ -260,6 +263,14 @@ document.getElementById('ism').value;
 const tur =
 document.getElementById('tur').value;
 
+if(currentUser === ""){
+
+alert("Avval login qiling");
+
+return;
+
+}
+
 fetch('/api/ariza',{
 
 method:'POST',
@@ -270,8 +281,8 @@ headers:{
 
 body:JSON.stringify({
 
-ism,
-tur,
+ism:ism,
+tur:tur,
 user:currentUser,
 hujjat:'Yuklanmagan'
 
@@ -279,6 +290,7 @@ hujjat:'Yuklanmagan'
 
 })
 .then(res=>res.json())
+
 .then(data=>{
 
 alert(data.message);
