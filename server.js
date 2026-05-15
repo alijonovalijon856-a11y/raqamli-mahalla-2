@@ -10,6 +10,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+app.use(express.urlencoded({ extended:true }));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 const storage = multer.diskStorage({
@@ -227,6 +229,8 @@ message:"Ariza yuborildi"
 });
 
 }catch(err){
+
+console.log(err);
 
 res.status(500).json({
 message:"Saqlashda xatolik"
