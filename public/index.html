@@ -89,11 +89,6 @@ background:#1f2937;
 color:white;
 }
 
-.file-link{
-display:block;
-margin-top:10px;
-}
-
 </style>
 </head>
 
@@ -165,8 +160,6 @@ Kirish
 <option>Subsidiya</option>
 
 </select>
-
-<input type="file" id="hujjat">
 
 <button class="send" onclick="yuborish()">
 Yuborish
@@ -272,28 +265,24 @@ return;
 
 }
 
-const formData = new FormData();
+const data = {
 
-formData.append('ism', ism);
+ism:ism,
+tur:tur,
+user:currentUser,
+hujjat:''
 
-formData.append('tur', tur);
-
-formData.append('user', currentUser);
-
-const file =
-document.getElementById('hujjat').files[0];
-
-if(file){
-
-formData.append('hujjat', file);
-
-}
+};
 
 fetch('/api/ariza',{
 
 method:'POST',
 
-body:formData
+headers:{
+'Content-Type':'application/json'
+},
+
+body:JSON.stringify(data)
 
 })
 .then(res=>res.json())
@@ -303,8 +292,6 @@ body:formData
 alert(data.message);
 
 document.getElementById('ism').value = "";
-
-document.getElementById('hujjat').value = "";
 
 loadArizalar();
 
@@ -332,13 +319,7 @@ html += `
 
 Tur: ${data[i].tur}<br>
 
-Status: ${data[i].status}<br>
-
-<a class="file-link"
-href="${data[i].hujjat}"
-target="_blank">
-📎 Hujjatni ochish
-</a>
+Status: ${data[i].status}
 
 </div>
 
