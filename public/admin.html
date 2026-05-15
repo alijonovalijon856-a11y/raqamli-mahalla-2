@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Admin Panel</title>
+<title>Professional Admin Panel</title>
 
 <style>
 
@@ -53,6 +53,7 @@ color:white;
 display:flex;
 gap:20px;
 flex-wrap:wrap;
+margin-bottom:20px;
 }
 
 .stat-box{
@@ -66,12 +67,21 @@ font-size:20px;
 font-weight:bold;
 }
 
+input,select{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:10px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
 </style>
 </head>
 
 <body>
 
-<h1>👨‍💼 Admin Panel</h1>
+<h1>👨‍💼 Professional Admin Panel</h1>
 
 <div class="stats">
 
@@ -102,6 +112,30 @@ font-weight:bold;
 
 <h2>📋 Barcha arizalar</h2>
 
+<input
+type="text"
+id="search"
+placeholder="🔎 Ism qidirish"
+onkeyup="filterAriza()"
+>
+
+<select id="statusFilter"
+onchange="filterAriza()">
+
+<option value="all">
+Barchasi
+</option>
+
+<option value="pending">
+Kutilmoqda
+</option>
+
+<option value="approved">
+Tasdiqlangan
+</option>
+
+</select>
+
 <div id="royxat"></div>
 
 </div>
@@ -113,6 +147,8 @@ fetch('/api/all')
 .then(res=>res.json())
 
 .then(data=>{
+
+window.allData = data;
 
 document.getElementById('jami')
 .innerText = data.length;
@@ -128,6 +164,12 @@ document.getElementById('tasdiq')
 document.getElementById('kutish')
 .innerText =
 data.length - tasdiq;
+
+renderAriza(data);
+
+});
+
+function renderAriza(data){
 
 let html='';
 
@@ -172,7 +214,38 @@ onclick="ochirish('${data[i]._id}')"
 document.getElementById('royxat')
 .innerHTML = html;
 
-});
+}
+
+function filterAriza(){
+
+const qidiruv =
+document.getElementById('search')
+.value.toLowerCase();
+
+const status =
+document.getElementById('statusFilter')
+.value;
+
+let filtered =
+window.allData;
+
+if(status !== 'all'){
+
+filtered = filtered.filter(
+a => a.status === status
+);
+
+}
+
+filtered = filtered.filter(
+a =>
+a.ism.toLowerCase()
+.includes(qidiruv)
+);
+
+renderAriza(filtered);
+
+}
 
 function tasdiqlash(id){
 
