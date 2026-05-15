@@ -155,7 +155,7 @@ const arizalar = await Ariza.find({
 
 user:req.params.user
 
-});
+}).sort({_id:-1});
 
 res.json(arizalar);
 
