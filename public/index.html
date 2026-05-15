@@ -1,368 +1,78 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Raqamli Mahalla</title>
-
-<style>
-
-body{
-  margin:0;
-  font-family:Arial;
-  background:#f4f6f9;
-  transition:0.3s;
-}
-
-header{
-  background:#2563eb;
-  color:white;
-  padding:20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-}
-
-.logo{
-  font-size:28px;
-  font-weight:bold;
-}
-
-.top-buttons{
-  display:flex;
-  gap:10px;
-}
-
-.top-buttons button{
-  border:none;
-  border-radius:8px;
-  padding:10px 15px;
-  cursor:pointer;
-}
-
-.container{
-  max-width:800px;
-  margin:auto;
-  padding:20px;
-}
-
-.card{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  margin-bottom:20px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
-}
-
-input, select{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  box-sizing:border-box;
-}
-
-button{
-  padding:12px 18px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  margin-top:10px;
-}
-
-.send{
-  background:#2563eb;
-  color:white;
-  width:100%;
-}
-
-.approve{
-  background:green;
-  color:white;
-}
-
-.delete{
-  background:red;
-  color:white;
-}
-
-.ariza{
-  background:white;
-  padding:15px;
-  border-radius:10px;
-  margin-top:15px;
-}
-
-#login,
-#userLogin{
-  max-width:400px;
-  margin:40px auto;
-  background:white;
-  padding:30px;
-  border-radius:12px;
-  text-align:center;
-}
-
-.dark{
-  background:#111827;
-  color:white;
-}
-
-.dark .card,
-.dark .ariza,
-.dark #login,
-.dark #userLogin{
-  background:#1f2937;
-  color:white;
-}
-
-.dark input,
-.dark select{
-  background:#374151;
-  color:white;
-  border:none;
-}
-
-#fileText{
-  display:block;
-  margin-top:15px;
-  font-weight:bold;
-}
-
-#notification{
-  margin-top:20px;
-  padding:15px;
-  border-radius:10px;
-  background:#dcfce7;
-  color:#166534;
-  font-weight:bold;
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-
-<div class="logo">
-🏛 Raqamli Mahalla
-</div>
-
-<div class="top-buttons">
-
-<button onclick="changeLang('uz')">🇺🇿 UZ</button>
-
-<button onclick="changeLang('ru')">🇷🇺 RU</button>
-
-<button onclick="changeLang('en')">🇬🇧 EN</button>
-
-<button onclick="darkMode()">🌙</button>
-
-</div>
-
-</header>
-
-<div id="userLogin">
-
-<h2>👤 Fuqaro kabineti</h2>
-
-<input
-type="text"
-id="userName"
-placeholder="Ismingizni kiriting"
->
-
-<button
-class="send"
-onclick="foydalanuvchiKirish()"
->
-Kirish
-</button>
-
-</div>
-
-<div id="login" style="display:none;">
-
-<h2 id="loginTitle">Admin Login</h2>
-
-<input type="password" id="parol" placeholder="Parol">
-
-<button onclick="kirish()" id="loginBtn">
-Kirish
-</button>
-
-</div>
-
-<div class="container" id="asosiy" style="display:none;">
-
-<div class="card">
-
-<h2 id="statTitle">📊 Statistika</h2>
-
-<p id="jamiText">Jami arizalar: <span id="jami">0</span></p>
-
-<p id="tasdiqText">Tasdiqlangan: <span id="tasdiq">0</span></p>
-
-<p id="kutishText">Kutilmoqda: <span id="kutish">0</span></p>
-
-</div>
-
-<div class="card">
-
-<h2 id="arizaTitle">Ariza yuborish</h2>
-
-<input type="text" id="ism" placeholder="Ismingiz">
-
-<select id="tur">
-<option>Nafaqa</option>
-<option>Yordam</option>
-<option>Subsidiya</option>
-</select>
-
-<label id="fileText">
-📎 Hujjat yuklang
-</label>
-
-<button
-type="button"
-class="send"
-id="chooseBtn"
-onclick="document.getElementById('hujjat').click()"
->
-📎 Fayl tanlash
-</button>
-
-<input
-type="file"
-id="hujjat"
-style="display:none;"
-onchange="fileName()"
->
-
-<button class="send" id="sendBtn" onclick="yuborish()">
-Yuborish
-</button>
-
-</div>
-
-<div class="card">
-
-<h2 id="listTitle">Mening arizalarim</h2>
-
-<div id="royxat"></div>
-
-<div id="notification"></div>
-
-</div>
-
-<div class="card">
-
-<h2>🤖 AI Yordamchi</h2>
-
-<input type="text" id="savol" placeholder="Savol yozing">
-
-<button onclick="javobBer()" class="send">
-Yuborish
-</button>
-
-<div id="javob" style="margin-top:20px;font-weight:bold;white-space:pre-line;"></div>
-
-</div>
-
-</div>
-
 <script>
+
+function register(){
+
+fetch('/api/register',{
+
+method:'POST',
+
+headers:{
+'Content-Type':'application/json'
+},
+
+body:JSON.stringify({
+
+login:document.getElementById('loginUser').value,
+password:document.getElementById('loginPass').value
+
+})
+
+})
+.then(res=>res.json())
+.then(data=>{
+
+alert(data.message);
+
+});
+
+}
+
+function login(){
+
+fetch('/api/login',{
+
+method:'POST',
+
+headers:{
+'Content-Type':'application/json'
+},
+
+body:JSON.stringify({
+
+login:document.getElementById('loginUser').value,
+password:document.getElementById('loginPass').value
+
+})
+
+})
+.then(res=>res.json())
+.then(data=>{
+
+alert(data.message);
+
+if(data.user){
+
+document.getElementById('authBox')
+.style.display='none';
+
+}
+
+});
+
+}
+
+let til = "uz";
 
 let arizalar = [];
 
-let currentLang = "uz";
-
 let currentUser = "";
-
-const langs = {
-
-uz:{
-login:"Admin Login",
-enter:"Kirish",
-stat:"📊 Statistika",
-all:"Jami arizalar",
-approved:"Tasdiqlangan",
-pending:"Kutilmoqda",
-sendApplication:"Ariza yuborish",
-name:"Ismingiz",
-send:"Yuborish",
-apps:"Mening arizalarim",
-type:"Tur",
-status:"Status",
-approve:"Tasdiqlash",
-delete:"O'chirish",
-benefit:"Nafaqa",
-help:"Yordam",
-subsidy:"Subsidiya",
-file:"📎 Hujjat yuklang",
-choose:"📎 Fayl tanlash"
-},
-
-ru:{
-login:"Вход Админа",
-enter:"Войти",
-stat:"📊 Статистика",
-all:"Всего заявок",
-approved:"Подтверждено",
-pending:"Ожидается",
-sendApplication:"Отправить заявку",
-name:"Ваше имя",
-send:"Отправить",
-apps:"Мои заявки",
-type:"Тип",
-status:"Статус",
-approve:"Подтвердить",
-delete:"Удалить",
-benefit:"Пособие",
-help:"Помощь",
-subsidy:"Субсидия",
-file:"📎 Загрузите документ",
-choose:"📎 Выбрать файл"
-},
-
-en:{
-login:"Admin Login",
-enter:"Login",
-stat:"📊 Statistics",
-all:"Total applications",
-approved:"Approved",
-pending:"Pending",
-sendApplication:"Send Application",
-name:"Your name",
-send:"Send",
-apps:"My applications",
-type:"Type",
-status:"Status",
-approve:"Approve",
-delete:"Delete",
-benefit:"Allowance",
-help:"Help",
-subsidy:"Subsidy",
-file:"📎 Upload document",
-choose:"📎 Choose file"
-}
-
-};
-
-function darkMode(){
-document.body.classList.toggle("dark");
-}
 
 function foydalanuvchiKirish(){
 
-let name = document
-.getElementById("userName")
-.value;
+const ism =
+document.getElementById("userName").value;
 
-if(name === ""){
+if(ism === ""){
 
 alert("Ism kiriting");
 
@@ -370,7 +80,7 @@ return;
 
 }
 
-currentUser = name;
+currentUser = ism;
 
 document.getElementById("userLogin")
 .style.display = "none";
@@ -380,183 +90,167 @@ document.getElementById("login")
 
 }
 
-function fileName(){
-
-let file = document
-.getElementById("hujjat")
-.files[0];
-
-if(file){
-
-document.getElementById("fileText")
-.innerText =
-"📎 " + file.name;
-
-}
-
-}
-
-function changeLang(lang){
-
-currentLang = lang;
-
-let t = langs[lang];
-
-document.getElementById("loginTitle").innerText = t.login;
-document.getElementById("loginBtn").innerText = t.enter;
-
-document.getElementById("statTitle").innerText = t.stat;
-
-document.getElementById("jamiText").innerHTML =
-`${t.all}: <span id="jami">${arizalar.length}</span>`;
-
-document.getElementById("tasdiqText").innerHTML =
-`${t.approved}: <span id="tasdiq">0</span>`;
-
-document.getElementById("kutishText").innerHTML =
-`${t.pending}: <span id="kutish">0</span>`;
-
-document.getElementById("arizaTitle").innerText = t.sendApplication;
-
-document.getElementById("ism").placeholder = t.name;
-
-document.getElementById("sendBtn").innerText = t.send;
-
-document.getElementById("listTitle").innerText = t.apps;
-
-document.getElementById("fileText").innerText = t.file;
-
-document.getElementById("chooseBtn").innerText = t.choose;
-
-document.getElementById("tur").innerHTML = `
-<option>${t.benefit}</option>
-<option>${t.help}</option>
-<option>${t.subsidy}</option>
-`;
-
-chiqarish();
-
-}
-
 function kirish(){
 
-let parol = document.getElementById("parol").value;
+let parol =
+document.getElementById("parol").value;
 
 if(parol === "1234"){
 
-document.getElementById("login").style.display = "none";
+document.getElementById("login")
+.style.display = "none";
 
-document.getElementById("asosiy").style.display = "block";
+document.getElementById("asosiy")
+.style.display = "block";
 
-}else{
-
-alert("Parol noto'g'ri");
-
-}
-
-}
-
-function chiqarish(){
-
-let royxat = document.getElementById("royxat");
-
-royxat.innerHTML = "";
-
-let approved = 0;
-let pending = 0;
-
-arizalar.forEach(ariza => {
-
-if(ariza.status === "approved"){
-
-approved++;
-
-document.getElementById("notification")
-.innerText =
-"✅ Arizangiz tasdiqlangan";
+loadArizalar();
 
 }else{
 
-pending++;
+alert("Parol xato");
 
 }
 
-royxat.innerHTML += `
-<div class="ariza">
+}
 
-<h3>${ariza.ism}</h3>
+function fileName(){
 
-<p>${langs[currentLang].type}: ${ariza.tur}</p>
+const file =
+document.getElementById("hujjat").files[0];
 
-<p>${langs[currentLang].status}: ${ariza.status}</p>
+if(file){
 
-<p>📎 Hujjat: ${ariza.hujjat}</p>
+document.getElementById("chooseBtn")
+.innerText = "✅ " + file.name;
 
-<button class="approve" onclick="tasdiqlash(${ariza.id})">
-${langs[currentLang].approve}
-</button>
-
-<button class="delete" onclick="ochirish(${ariza.id})">
-${langs[currentLang].delete}
-</button>
-
-</div>
-`;
-
-});
-
-document.getElementById("jami").innerText = arizalar.length;
-document.getElementById("tasdiq").innerText = approved;
-document.getElementById("kutish").innerText = pending;
+}
 
 }
 
 function yuborish(){
 
-let ism = document.getElementById("ism").value;
+const ism =
+document.getElementById("ism").value;
 
-let tur = document.getElementById("tur").value;
+const tur =
+document.getElementById("tur").value;
 
-let hujjat = document
-.getElementById("hujjat")
-.files[0];
+const file =
+document.getElementById("hujjat").files[0];
 
-fetch("/api/ariza",{
-method:"POST",
+fetch('/api/ariza',{
+
+method:'POST',
+
 headers:{
-"Content-Type":"application/json"
+'Content-Type':'application/json'
 },
+
 body:JSON.stringify({
+
 ism,
 tur,
 user:currentUser,
-hujjat:hujjat ? hujjat.name : "Yuklanmagan"
-})
-})
-.then(res => res.json())
-.then(data => {
+hujjat:file ? file.name : "Yuklanmagan"
 
-alert(data.message);
+})
+
+})
+.then(res=>res.json())
+.then(data=>{
 
 document.getElementById("notification")
-.innerText =
-"📨 Arizangiz yuborildi";
+.innerHTML =
+"✅ " + data.message;
 
-yuklash();
+loadArizalar();
 
 });
 
 }
 
-function yuklash(){
+function loadArizalar(){
 
-fetch("/api/arizalar")
-.then(res => res.json())
-.then(data => {
+fetch('/api/arizalar')
+.then(res=>res.json())
+.then(data=>{
 
 arizalar = data;
 
-chiqarish();
+render();
+
+});
+
+}
+
+function render(){
+
+let royxat = "";
+
+let jami = arizalar.length;
+
+let tasdiq =
+arizalar.filter(a=>a.status==="approved").length;
+
+let kutish =
+arizalar.filter(a=>a.status==="pending").length;
+
+document.getElementById("jami")
+.innerText = jami;
+
+document.getElementById("tasdiq")
+.innerText = tasdiq;
+
+document.getElementById("kutish")
+.innerText = kutish;
+
+arizalar.forEach((a)=>{
+
+royxat += `
+
+<div class="item">
+
+<b>${a.ism}</b><br>
+
+Tur: ${a.tur}<br><br>
+
+Status: ${a.status}<br><br>
+
+📎 Hujjat: ${a.hujjat}<br><br>
+
+<button onclick="tasdiqlash('${a._id}')">
+Tasdiqlash
+</button>
+
+<button onclick="ochirish('${a._id}')">
+O'chirish
+</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("royxat")
+.innerHTML = royxat;
+
+}
+
+function tasdiqlash(id){
+
+fetch('/api/ariza/' + id,{
+
+method:'PUT'
+
+})
+.then(()=>{
+
+loadArizalar();
+
+document.getElementById("notification")
+.innerHTML =
+"✅ Ariza tasdiqlandi";
 
 });
 
@@ -564,98 +258,72 @@ chiqarish();
 
 function ochirish(id){
 
-fetch("/api/ariza/" + id,{
-method:"DELETE"
+fetch('/api/ariza/' + id,{
+
+method:'DELETE'
+
 })
-.then(() => {
+.then(()=>{
+
+loadArizalar();
 
 document.getElementById("notification")
-.innerText =
+.innerHTML =
 "🗑 Ariza o'chirildi";
 
-yuklash();
-
 });
 
 }
 
-function tasdiqlash(id){
+function darkMode(){
 
-fetch("/api/ariza/" + id,{
-method:"PUT"
-})
-.then(() => {
-
-document.getElementById("notification")
-.innerText =
-"✅ Arizangiz tasdiqlandi";
-
-yuklash();
-
-});
+document.body.classList.toggle("dark");
 
 }
 
-function javobBer(){
+function changeLang(lang){
 
-let savol = document
-.getElementById("savol")
-.value
-.toLowerCase();
+til = lang;
 
-let javob = "";
+if(lang === "uz"){
 
-if(savol.includes("nafaqa")){
+document.getElementById("statTitle")
+.innerText = "📊 Statistika";
 
-javob = `📌 Nafaqa olish uchun kerak:
+document.getElementById("arizaTitle")
+.innerText = "Ariza yuborish";
 
-✅ Pasport
-✅ Daromad ma'lumoti
-✅ Oilaviy holat ma'lumoti
-
-📍 Platforma orqali online yuborishingiz mumkin.`;
-
-}
-else if(savol.includes("subsidiya")){
-
-javob = `📌 Subsidiya uchun kerak:
-
-✅ Pasport
-✅ Uy joy hujjati
-✅ Daromad ma'lumoti
-
-📍 Barcha hujjatlarni shu platformaga yuklang.`;
-
-}
-else if(savol.includes("yordam")){
-
-javob = `📌 Moddiy yordam uchun kerak:
-
-✅ Pasport
-✅ Oilaviy ma'lumot
-
-📍 Arizani online yuborishingiz mumkin.`;
-
-}
-else{
-
-javob = `🤖 Savol topilmadi.
-
-Quyidagilarni yozing:
-
-• nafaqa
-• subsidiya
-• yordam`;
+document.getElementById("listTitle")
+.innerText = "Mening arizalarim";
 
 }
 
-document.getElementById("javob").innerText = javob;
+if(lang === "ru"){
+
+document.getElementById("statTitle")
+.innerText = "📊 Статистика";
+
+document.getElementById("arizaTitle")
+.innerText = "Отправить заявку";
+
+document.getElementById("listTitle")
+.innerText = "Мои заявки";
 
 }
 
-yuklash();
+if(lang === "en"){
+
+document.getElementById("statTitle")
+.innerText = "📊 Statistics";
+
+document.getElementById("arizaTitle")
+.innerText = "Send Application";
+
+document.getElementById("listTitle")
+.innerText = "My Applications";
+
+}
+
+}
 
 </script>
-
-</body>
-</html>

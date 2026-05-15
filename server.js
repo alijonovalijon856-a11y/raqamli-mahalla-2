@@ -21,6 +21,16 @@ console.log("✅ MongoDB connected");
 console.log("❌ MongoDB error:", err);
 });
 
+const userSchema = new mongoose.Schema({
+
+login:String,
+password:String,
+role:String
+
+});
+
+const User = mongoose.model("User", userSchema);
+
 const arizaSchema = new mongoose.Schema({
 
 ism:String,
@@ -80,6 +90,60 @@ chatId,
 );
 
 }
+
+});
+
+app.post('/api/register', async(req,res)=>{
+
+const mavjud = await User.findOne({
+login:req.body.login
+});
+
+if(mavjud){
+
+return res.json({
+message:"User mavjud"
+});
+
+}
+
+const user = new User({
+
+login:req.body.login,
+password:req.body.password,
+role:"user"
+
+});
+
+await user.save();
+
+res.json({
+message:"Ro'yxatdan o'tdi"
+});
+
+});
+
+app.post('/api/login', async(req,res)=>{
+
+const user = await User.findOne({
+
+login:req.body.login,
+password:req.body.password
+
+});
+
+if(!user){
+
+return res.status(401).json({
+message:"Login yoki parol xato"
+});
+
+}
+
+res.json({
+message:"Kirish muvaffaqiyatli",
+user
+});
 
 });
 
