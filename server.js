@@ -180,6 +180,15 @@ hujjat:req.body.hujjat
 
 await yangiAriza.save();
 
+bot.sendMessage(
+8458618683,
+`📥 Yangi ariza!
+
+👤 ${req.body.ism}
+
+📌 ${req.body.tur}`
+);
+
 res.json({
 message:"Ariza yuborildi"
 });
@@ -205,6 +214,11 @@ status:"approved"
 }
 );
 
+bot.sendMessage(
+8458618683,
+"✅ Ariza tasdiqlandi"
+);
+
 res.json({
 message:"Tasdiqlandi"
 });
@@ -225,6 +239,11 @@ try{
 
 await Ariza.findByIdAndDelete(
 req.params.id
+);
+
+bot.sendMessage(
+8458618683,
+"🗑 Ariza o'chirildi"
 );
 
 res.json({
