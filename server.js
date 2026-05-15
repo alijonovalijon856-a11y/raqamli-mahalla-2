@@ -147,11 +147,15 @@ user
 
 });
 
-app.get('/api/arizalar', async(req,res)=>{
+app.get('/api/arizalar/:user', async(req,res)=>{
 
 try{
 
-const arizalar = await Ariza.find();
+const arizalar = await Ariza.find({
+
+user:req.params.user
+
+});
 
 res.json(arizalar);
 

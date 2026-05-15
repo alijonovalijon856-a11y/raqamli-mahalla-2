@@ -1,183 +1,6 @@
-<!DOCTYPE html>
-<html lang="uz">
-
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Raqamli Mahalla</title>
-
-<style>
-
-body{
-font-family:Arial;
-background:#f5f5f5;
-margin:0;
-padding:20px;
-}
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:#2563eb;
-color:white;
-padding:15px;
-border-radius:10px;
-}
-
-.logo{
-font-size:24px;
-font-weight:bold;
-}
-
-.top-buttons button{
-margin-left:5px;
-padding:8px 12px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
-
-.container{
-margin-top:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:10px;
-margin-bottom:20px;
-box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
-
-input,select{
-width:100%;
-padding:10px;
-margin-top:10px;
-margin-bottom:10px;
-border:1px solid #ccc;
-border-radius:6px;
-}
-
-button{
-padding:10px 15px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
-
-.send{
-background:#2563eb;
-color:white;
-}
-
-.item{
-border:1px solid #ddd;
-padding:10px;
-border-radius:8px;
-margin-top:10px;
-}
-
-.dark{
-background:#111827;
-color:white;
-}
-
-.dark .card{
-background:#1f2937;
-color:white;
-}
-
-</style>
-</head>
-
-<body>
-
-<div id="authBox" class="card" style="max-width:400px;margin:30px auto;">
-
-<h2>🔐 Login</h2>
-
-<input type="text" id="loginUser" placeholder="Login">
-
-<input type="password" id="loginPass" placeholder="Parol">
-
-<button class="send" onclick="register()">
-Ro'yxatdan o'tish
-</button>
-
-<button class="send" onclick="login()">
-Kirish
-</button>
-
-</div>
-
-<header>
-
-<div class="logo">
-🏛 Raqamli Mahalla
-</div>
-
-<div class="top-buttons">
-
-<button onclick="changeLang('uz')">🇺🇿 UZ</button>
-
-<button onclick="changeLang('ru')">🇷🇺 RU</button>
-
-<button onclick="changeLang('en')">🇬🇧 EN</button>
-
-<button onclick="darkMode()">🌙</button>
-
-</div>
-
-</header>
-
-<div class="container">
-
-<div class="card">
-
-<h2>📊 Statistika</h2>
-
-<p>
-Jami arizalar:
-<span id="jami">0</span>
-</p>
-
-</div>
-
-<div class="card">
-
-<h2>Ariza yuborish</h2>
-
-<input type="text" id="ism" placeholder="Ismingiz">
-
-<select id="tur">
-
-<option>Nafaqa</option>
-
-<option>Yordam</option>
-
-<option>Subsidiya</option>
-
-</select>
-
-<button class="send" onclick="yuborish()">
-Yuborish
-</button>
-
-</div>
-
-<div class="card">
-
-<h2>Mening arizalarim</h2>
-
-<div id="royxat"></div>
-
-</div>
-
-</div>
-
 <script>
+
+let currentUser = "";
 
 function register(){
 
@@ -231,6 +54,15 @@ password:document.getElementById('loginPass').value
 
 alert(data.message);
 
+if(data.user){
+
+currentUser =
+document.getElementById('loginUser').value;
+
+loadArizalar();
+
+}
+
 });
 
 }
@@ -255,7 +87,7 @@ body:JSON.stringify({
 
 ism,
 tur,
-user:'foydalanuvchi',
+user:currentUser,
 hujjat:'Yuklanmagan'
 
 })
@@ -274,8 +106,10 @@ loadArizalar();
 
 function loadArizalar(){
 
-fetch('/api/arizalar')
+fetch('/api/arizalar/' + currentUser)
+
 .then(res=>res.json())
+
 .then(data=>{
 
 let html = '';
@@ -320,10 +154,4 @@ console.log(lang);
 
 }
 
-loadArizalar();
-
 </script>
-
-</body>
-
-</html>
