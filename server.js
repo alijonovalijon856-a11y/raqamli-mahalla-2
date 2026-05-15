@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const TelegramBot = require('node-telegram-bot-api');
+const multer = require('multer');
 
 const app = express();
 
@@ -10,6 +11,28 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+const storage = multer.diskStorage({
+
+destination:function(req,file,cb){
+
+cb(null,'public/uploads');
+
+},
+
+filename:function(req,file,cb){
+
+cb(null,Date.now() + '-' + file.originalname);
+
+}
+
+});
+
+const upload = multer({
+
+storage:storage
+
+});
 
 mongoose.connect(
 "mongodb+srv://admin:mehri18352@cluster0.87jmenr.mongodb.net/raqamliMahalla?retryWrites=true&w=majority&appName=Cluster0"
@@ -169,7 +192,10 @@ message:"Xatolik"
 
 });
 
-app.post('/api/ariza', async(req,res)=>{
+app.post(
+'/api/ariza',
+upload.single('hujjat'),
+async(req,res)=>{
 
 try{
 
@@ -178,7 +204,10 @@ const yangiAriza = new Ariza({
 ism:req.body.ism,
 tur:req.body.tur,
 user:req.body.user,
-hujjat:req.body.hujjat
+
+hujjat:req.file
+? '/uploads/' + req.file.filename
+: 'Yuklanmagan'
 
 });
 
