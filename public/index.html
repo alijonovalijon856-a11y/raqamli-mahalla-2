@@ -101,7 +101,7 @@ margin-top:10px;
 
 <div id="authBox" class="card" style="max-width:400px;margin:30px auto;">
 
-<h2>🔐 Login</h2>
+<h2 id="loginTitle">🔐 Login</h2>
 
 <input type="text" id="loginUser" placeholder="Login">
 
@@ -141,10 +141,10 @@ Kirish
 
 <div class="card">
 
-<h2>📊 Statistika</h2>
+<h2 id="statText">📊 Statistika</h2>
 
 <p>
-Jami arizalar:
+<span id="jamiText">Jami arizalar:</span>
 <span id="jami">0</span>
 </p>
 
@@ -152,7 +152,7 @@ Jami arizalar:
 
 <div class="card">
 
-<h2>Ariza yuborish</h2>
+<h2 id="sendText">Ariza yuborish</h2>
 
 <input type="text" id="ism" placeholder="Ismingiz">
 
@@ -176,7 +176,7 @@ Yuborish
 
 <div class="card">
 
-<h2>Mening arizalarim</h2>
+<h2 id="myText">Mening arizalarim</h2>
 
 <div id="royxat"></div>
 
@@ -248,12 +248,6 @@ document.getElementById('loginUser').value;
 document.getElementById('authBox')
 .style.display = "none";
 
-document.getElementById('royxat')
-.innerHTML = "";
-
-document.getElementById('jami')
-.innerText = "0";
-
 loadArizalar();
 
 }
@@ -270,6 +264,9 @@ document.getElementById('ism').value;
 const tur =
 document.getElementById('tur').value;
 
+const file =
+document.getElementById('hujjat').files[0];
+
 if(currentUser === ""){
 
 alert("Avval login qiling");
@@ -280,16 +277,17 @@ return;
 
 const formData = new FormData();
 
-formData.append(
-'hujjat',
-document.getElementById('hujjat').files[0]
-);
-
 formData.append('ism', ism);
 
 formData.append('tur', tur);
 
 formData.append('user', currentUser);
+
+if(file){
+
+formData.append('hujjat', file);
+
+}
 
 fetch('/api/ariza',{
 
@@ -303,6 +301,10 @@ body:formData
 .then(data=>{
 
 alert(data.message);
+
+document.getElementById('ism').value = "";
+
+document.getElementById('hujjat').value = "";
 
 loadArizalar();
 
@@ -362,7 +364,53 @@ document.body.classList.toggle('dark');
 
 function changeLang(lang){
 
-console.log(lang);
+if(lang === "uz"){
+
+document.getElementById('statText')
+.innerText = "📊 Statistika";
+
+document.getElementById('sendText')
+.innerText = "Ariza yuborish";
+
+document.getElementById('myText')
+.innerText = "Mening arizalarim";
+
+document.getElementById('jamiText')
+.innerText = "Jami arizalar:";
+
+}
+
+if(lang === "ru"){
+
+document.getElementById('statText')
+.innerText = "📊 Статистика";
+
+document.getElementById('sendText')
+.innerText = "Отправить заявку";
+
+document.getElementById('myText')
+.innerText = "Мои заявки";
+
+document.getElementById('jamiText')
+.innerText = "Всего заявок:";
+
+}
+
+if(lang === "en"){
+
+document.getElementById('statText')
+.innerText = "📊 Statistics";
+
+document.getElementById('sendText')
+.innerText = "Send application";
+
+document.getElementById('myText')
+.innerText = "My applications";
+
+document.getElementById('jamiText')
+.innerText = "Total applications:";
+
+}
 
 }
 
