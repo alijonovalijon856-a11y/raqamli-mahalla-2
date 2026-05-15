@@ -194,25 +194,17 @@ message:"Xatolik"
 
 });
 
-app.post(
-'/api/ariza',
-upload.single('hujjat'),
-async(req,res)=>{
+app.post('/api/ariza', async(req,res)=>{
 
 try{
-
-console.log(req.body);
-console.log(req.file);
 
 const yangiAriza = new Ariza({
 
 ism:req.body.ism,
 tur:req.body.tur,
 user:req.body.user,
-
-hujjat:req.file
-? '/uploads/' + req.file.filename
-: ''
+hujjat:req.body.hujjat || '',
+status:'pending'
 
 });
 
@@ -237,6 +229,41 @@ console.log(err);
 
 res.status(500).json({
 message:"Saqlashda xatolik"
+});
+
+}
+
+});
+
+app.post(
+'/api/upload',
+upload.single('file'),
+async(req,res)=>{
+
+try{
+
+if(!req.file){
+
+return res.status(400).json({
+message:"Fayl topilmadi"
+});
+
+}
+
+res.json({
+
+message:"Fayl yuklandi",
+
+file:'/uploads/' + req.file.filename
+
+});
+
+}catch(err){
+
+console.log(err);
+
+res.status(500).json({
+message:"Upload xatolik"
 });
 
 }
