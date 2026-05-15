@@ -49,6 +49,23 @@ background:red;
 color:white;
 }
 
+.stats{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.stat-box{
+flex:1;
+min-width:200px;
+background:#2563eb;
+color:white;
+padding:20px;
+border-radius:10px;
+font-size:20px;
+font-weight:bold;
+}
+
 </style>
 </head>
 
@@ -56,9 +73,34 @@ color:white;
 
 <h1>👨‍💼 Admin Panel</h1>
 
+<div class="stats">
+
+<div class="stat-box">
+
+📊 Jami arizalar<br>
+<span id="jami">0</span>
+
+</div>
+
+<div class="stat-box">
+
+✅ Tasdiqlangan<br>
+<span id="tasdiq">0</span>
+
+</div>
+
+<div class="stat-box">
+
+⏳ Kutilmoqda<br>
+<span id="kutish">0</span>
+
+</div>
+
+</div>
+
 <div class="card">
 
-<h2>📊 Barcha arizalar</h2>
+<h2>📋 Barcha arizalar</h2>
 
 <div id="royxat"></div>
 
@@ -71,6 +113,21 @@ fetch('/api/all')
 .then(res=>res.json())
 
 .then(data=>{
+
+document.getElementById('jami')
+.innerText = data.length;
+
+const tasdiq =
+data.filter(
+a => a.status === 'approved'
+).length;
+
+document.getElementById('tasdiq')
+.innerText = tasdiq;
+
+document.getElementById('kutish')
+.innerText =
+data.length - tasdiq;
 
 let html='';
 
