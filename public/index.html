@@ -89,11 +89,6 @@ background:#1f2937;
 color:white;
 }
 
-.file-link{
-display:block;
-margin-top:10px;
-}
-
 </style>
 </head>
 
@@ -133,6 +128,10 @@ Kirish
 
 <button onclick="darkMode()">🌙</button>
 
+<button onclick="adminKirish()">
+👨‍💼 Admin
+</button>
+
 </div>
 
 </header>
@@ -165,8 +164,6 @@ Kirish
 <option>Subsidiya</option>
 
 </select>
-
-<input type="file" id="hujjat">
 
 <button class="send" onclick="yuborish()">
 Yuborish
@@ -272,65 +269,6 @@ return;
 
 }
 
-const file =
-document.getElementById('hujjat').files[0];
-
-if(file){
-
-const uploadData = new FormData();
-
-uploadData.append('file', file);
-
-fetch('/api/upload',{
-
-method:'POST',
-
-body:uploadData
-
-})
-.then(res=>res.json())
-
-.then(uploadRes=>{
-
-const data = {
-
-ism:ism,
-tur:tur,
-user:currentUser,
-hujjat:uploadRes.file
-
-};
-
-return fetch('/api/ariza',{
-
-method:'POST',
-
-headers:{
-'Content-Type':'application/json'
-},
-
-body:JSON.stringify(data)
-
-});
-
-})
-.then(res=>res.json())
-
-.then(data=>{
-
-alert(data.message);
-
-document.getElementById('ism').value = "";
-
-document.getElementById('hujjat').value = "";
-
-loadArizalar();
-
-});
-
-}
-else{
-
 const data = {
 
 ism:ism,
@@ -357,11 +295,11 @@ body:JSON.stringify(data)
 
 alert(data.message);
 
+document.getElementById('ism').value = "";
+
 loadArizalar();
 
 });
-
-}
 
 }
 
@@ -385,16 +323,7 @@ html += `
 
 Tur: ${data[i].tur}<br>
 
-Status: ${data[i].status}<br>
-
-${data[i].hujjat
-? `<a class="file-link"
-href="${data[i].hujjat}"
-target="_blank">
-📎 Hujjatni ochish
-</a>`
-: ''
-}
+Status: ${data[i].status}
 
 </div>
 
@@ -465,6 +394,25 @@ document.getElementById('myText')
 
 document.getElementById('jamiText')
 .innerText = "Total applications:";
+
+}
+
+}
+
+function adminKirish(){
+
+const parol =
+prompt("Admin parolni kiriting");
+
+if(parol === "admin123"){
+
+window.location.href =
+"/admin.html";
+
+}
+else{
+
+alert("Parol xato");
 
 }
 

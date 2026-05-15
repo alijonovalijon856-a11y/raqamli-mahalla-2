@@ -194,6 +194,25 @@ message:"Xatolik"
 
 });
 
+app.get('/api/all', async(req,res)=>{
+
+try{
+
+const arizalar =
+await Ariza.find().sort({_id:-1});
+
+res.json(arizalar);
+
+}catch(err){
+
+res.status(500).json({
+message:"Xatolik"
+});
+
+}
+
+});
+
 app.post('/api/ariza', async(req,res)=>{
 
 try{
