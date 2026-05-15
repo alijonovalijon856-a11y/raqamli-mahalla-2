@@ -201,6 +201,9 @@ async(req,res)=>{
 
 try{
 
+console.log(req.body);
+console.log(req.file);
+
 const yangiAriza = new Ariza({
 
 ism:req.body.ism,
@@ -209,7 +212,7 @@ user:req.body.user,
 
 hujjat:req.file
 ? '/uploads/' + req.file.filename
-: 'Yuklanmagan'
+: ''
 
 });
 
