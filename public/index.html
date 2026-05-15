@@ -1,28 +1,174 @@
+# public/index.html
+
+```html
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raqamli Mahalla</title>
+
+<style>
+body{
+font-family:Arial;
+background:#f5f5f5;
+padding:20px;
+margin:0;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#2563eb;
+color:white;
+padding:15px;
+border-radius:10px;
+}
+
+.logo{
+font-size:24px;
+font-weight:bold;
+}
+
+.top-buttons button{
+margin-left:5px;
+padding:8px 12px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.container{
+margin-top:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:10px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.send{
+background:#2563eb;
+color:white;
+}
+
+.item{
+border:1px solid #ddd;
+padding:10px;
+border-radius:8px;
+margin-top:10px;
+}
+
+.dark{
+background:#111827;
+color:white;
+}
+
+.dark .card{
+background:#1f2937;
+color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div id="authBox" class="card" style="max-width:400px;margin:30px auto;">
+
+<h2>🔐 Login</h2>
+
+<input type="text" id="loginUser" placeholder="Login">
+
+<input type="password" id="loginPass" placeholder="Parol">
+
+<button class="send" onclick="register()">
+Ro'yxatdan o'tish
+</button>
+
+<button class="send" onclick="login()">
+Kirish
+</button>
+
+</div>
+
+<header>
+<div class="logo">🏛 Raqamli Mahalla</div>
+
+<div class="top-buttons">
+<button onclick="changeLang('uz')">🇺🇿 UZ</button>
+<button onclick="changeLang('ru')">🇷🇺 RU</button>
+<button onclick="changeLang('en')">🇬🇧 EN</button>
+<button onclick="darkMode()">🌙</button>
+</div>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>📊 Statistika</h2>
+<p>Jami arizalar: <span id="jami">0</span></p>
+</div>
+
+<div class="card">
+<h2>Ariza yuborish</h2>
+
+<input type="text" id="ism" placeholder="Ismingiz">
+
+<select id="tur">
+<option>Nafaqa</option>
+<option>Yordam</option>
+<option>Subsidiya</option>
+</select>
+
+<button class="send" onclick="yuborish()">
+Yuborish
+</button>
+</div>
+
+<div class="card">
+<h2>Mening arizalarim</h2>
+<div id="royxat"></div>
+</div>
+
+</div>
+
 <script>
 
 function register(){
 
 fetch('/api/register',{
-
 method:'POST',
-
 headers:{
 'Content-Type':'application/json'
 },
-
 body:JSON.stringify({
-
 login:document.getElementById('loginUser').value,
 password:document.getElementById('loginPass').value
-
 })
-
 })
 .then(res=>res.json())
 .then(data=>{
-
 alert(data.message);
-
 });
 
 }
@@ -30,141 +176,43 @@ alert(data.message);
 function login(){
 
 fetch('/api/login',{
-
 method:'POST',
-
 headers:{
 'Content-Type':'application/json'
 },
-
 body:JSON.stringify({
-
 login:document.getElementById('loginUser').value,
 password:document.getElementById('loginPass').value
-
 })
-
 })
 .then(res=>res.json())
 .then(data=>{
-
 alert(data.message);
-
-if(data.user){
-
-document.getElementById('authBox')
-.style.display='none';
-
-}
-
 });
-
-}
-
-let til = "uz";
-
-let arizalar = [];
-
-let currentUser = "";
-
-function foydalanuvchiKirish(){
-
-const ism =
-document.getElementById("userName").value;
-
-if(ism === ""){
-
-alert("Ism kiriting");
-
-return;
-
-}
-
-currentUser = ism;
-
-document.getElementById("userLogin")
-.style.display = "none";
-
-document.getElementById("login")
-.style.display = "block";
-
-}
-
-function kirish(){
-
-let parol =
-document.getElementById("parol").value;
-
-if(parol === "1234"){
-
-document.getElementById("login")
-.style.display = "none";
-
-document.getElementById("asosiy")
-.style.display = "block";
-
-loadArizalar();
-
-}else{
-
-alert("Parol xato");
-
-}
-
-}
-
-function fileName(){
-
-const file =
-document.getElementById("hujjat").files[0];
-
-if(file){
-
-document.getElementById("chooseBtn")
-.innerText = "✅ " + file.name;
-
-}
 
 }
 
 function yuborish(){
 
-const ism =
-document.getElementById("ism").value;
-
-const tur =
-document.getElementById("tur").value;
-
-const file =
-document.getElementById("hujjat").files[0];
+const ism = document.getElementById('ism').value;
+const tur = document.getElementById('tur').value;
 
 fetch('/api/ariza',{
-
 method:'POST',
-
 headers:{
 'Content-Type':'application/json'
 },
-
 body:JSON.stringify({
-
 ism,
 tur,
-user:currentUser,
-hujjat:file ? file.name : "Yuklanmagan"
-
+user:'foydalanuvchi',
+hujjat:'Yuklanmagan'
 })
-
 })
 .then(res=>res.json())
 .then(data=>{
-
-document.getElementById("notification")
-.innerHTML =
-"✅ " + data.message;
-
+alert(data.message);
 loadArizalar();
-
 });
 
 }
@@ -175,159 +223,38 @@ fetch('/api/arizalar')
 .then(res=>res.json())
 .then(data=>{
 
-arizalar = data;
+let html = '';
 
-render();
+for(let i=0;i<data.length;i++){
 
-});
-
-}
-
-function render(){
-
-let royxat = "";
-
-let jami = arizalar.length;
-
-let tasdiq =
-arizalar.filter(a=>a.status==="approved").length;
-
-let kutish =
-arizalar.filter(a=>a.status==="pending").length;
-
-document.getElementById("jami")
-.innerText = jami;
-
-document.getElementById("tasdiq")
-.innerText = tasdiq;
-
-document.getElementById("kutish")
-.innerText = kutish;
-
-arizalar.forEach((a)=>{
-
-royxat += `
-
+html += `
 <div class="item">
-
-<b>${a.ism}</b><br>
-
-Tur: ${a.tur}<br><br>
-
-Status: ${a.status}<br><br>
-
-📎 Hujjat: ${a.hujjat}<br><br>
-
-<button onclick="tasdiqlash('${a._id}')">
-Tasdiqlash
-</button>
-
-<button onclick="ochirish('${a._id}')">
-O'chirish
-</button>
-
+<b>${data[i].ism}</b><br>
+Tur: ${data[i].tur}<br>
+Status: ${data[i].status}
 </div>
-
 `;
 
-});
-
-document.getElementById("royxat")
-.innerHTML = royxat;
-
 }
 
-function tasdiqlash(id){
-
-fetch('/api/ariza/' + id,{
-
-method:'PUT'
-
-})
-.then(()=>{
-
-loadArizalar();
-
-document.getElementById("notification")
-.innerHTML =
-"✅ Ariza tasdiqlandi";
-
-});
-
-}
-
-function ochirish(id){
-
-fetch('/api/ariza/' + id,{
-
-method:'DELETE'
-
-})
-.then(()=>{
-
-loadArizalar();
-
-document.getElementById("notification")
-.innerHTML =
-"🗑 Ariza o'chirildi";
+document.getElementById('royxat').innerHTML = html;
+document.getElementById('jami').innerText = data.length;
 
 });
 
 }
 
 function darkMode(){
-
-document.body.classList.toggle("dark");
-
+document.body.classList.toggle('dark');
 }
 
 function changeLang(lang){
-
-til = lang;
-
-if(lang === "uz"){
-
-document.getElementById("statTitle")
-.innerText = "📊 Statistika";
-
-document.getElementById("arizaTitle")
-.innerText = "Ariza yuborish";
-
-document.getElementById("listTitle")
-.innerText = "Mening arizalarim";
-
+console.log(lang);
 }
 
-if(lang === "ru"){
+loadArizalar();
 
-document.getElementById("statTitle")
-.innerText = "📊 Статистика";
-
-document.getElementById("arizaTitle")
-.innerText = "Отправить заявку";
-
-document.getElementById("listTitle")
-.innerText = "Мои заявки";
-
-}
-
-if(lang === "en"){
-
-document.getElementById("statTitle")
-.innerText = "📊 Statistics";
-
-document.getElementById("arizaTitle")
-.innerText = "Send Application";
-
-document.getElementById("listTitle")
-.innerText = "My Applications";
-
-}
-
-}
-
-</script> 
+</script>
 
 </body>
-
 </html>
