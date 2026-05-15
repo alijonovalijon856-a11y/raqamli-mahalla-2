@@ -1,19 +1,19 @@
-# public/index.html
-
-```html
 <!DOCTYPE html>
 <html lang="uz">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Raqamli Mahalla</title>
 
 <style>
+
 body{
 font-family:Arial;
 background:#f5f5f5;
-padding:20px;
 margin:0;
+padding:20px;
 }
 
 header{
@@ -88,6 +88,7 @@ color:white;
 background:#1f2937;
 color:white;
 }
+
 </style>
 </head>
 
@@ -112,42 +113,66 @@ Kirish
 </div>
 
 <header>
-<div class="logo">🏛 Raqamli Mahalla</div>
+
+<div class="logo">
+🏛 Raqamli Mahalla
+</div>
 
 <div class="top-buttons">
+
 <button onclick="changeLang('uz')">🇺🇿 UZ</button>
+
 <button onclick="changeLang('ru')">🇷🇺 RU</button>
+
 <button onclick="changeLang('en')">🇬🇧 EN</button>
+
 <button onclick="darkMode()">🌙</button>
+
 </div>
+
 </header>
 
 <div class="container">
 
 <div class="card">
+
 <h2>📊 Statistika</h2>
-<p>Jami arizalar: <span id="jami">0</span></p>
+
+<p>
+Jami arizalar:
+<span id="jami">0</span>
+</p>
+
 </div>
 
 <div class="card">
+
 <h2>Ariza yuborish</h2>
 
 <input type="text" id="ism" placeholder="Ismingiz">
 
 <select id="tur">
+
 <option>Nafaqa</option>
+
 <option>Yordam</option>
+
 <option>Subsidiya</option>
+
 </select>
 
 <button class="send" onclick="yuborish()">
 Yuborish
 </button>
+
 </div>
 
 <div class="card">
+
 <h2>Mening arizalarim</h2>
+
 <div id="royxat"></div>
+
 </div>
 
 </div>
@@ -157,18 +182,27 @@ Yuborish
 function register(){
 
 fetch('/api/register',{
+
 method:'POST',
+
 headers:{
 'Content-Type':'application/json'
 },
+
 body:JSON.stringify({
+
 login:document.getElementById('loginUser').value,
+
 password:document.getElementById('loginPass').value
+
 })
+
 })
 .then(res=>res.json())
 .then(data=>{
+
 alert(data.message);
+
 });
 
 }
@@ -176,43 +210,64 @@ alert(data.message);
 function login(){
 
 fetch('/api/login',{
+
 method:'POST',
+
 headers:{
 'Content-Type':'application/json'
 },
+
 body:JSON.stringify({
+
 login:document.getElementById('loginUser').value,
+
 password:document.getElementById('loginPass').value
+
 })
+
 })
 .then(res=>res.json())
 .then(data=>{
+
 alert(data.message);
+
 });
 
 }
 
 function yuborish(){
 
-const ism = document.getElementById('ism').value;
-const tur = document.getElementById('tur').value;
+const ism =
+document.getElementById('ism').value;
+
+const tur =
+document.getElementById('tur').value;
 
 fetch('/api/ariza',{
+
 method:'POST',
+
 headers:{
 'Content-Type':'application/json'
 },
+
 body:JSON.stringify({
+
 ism,
 tur,
 user:'foydalanuvchi',
 hujjat:'Yuklanmagan'
+
 })
+
 })
 .then(res=>res.json())
 .then(data=>{
+
 alert(data.message);
+
 loadArizalar();
+
 });
 
 }
@@ -228,28 +283,41 @@ let html = '';
 for(let i=0;i<data.length;i++){
 
 html += `
+
 <div class="item">
+
 <b>${data[i].ism}</b><br>
+
 Tur: ${data[i].tur}<br>
+
 Status: ${data[i].status}
+
 </div>
+
 `;
 
 }
 
-document.getElementById('royxat').innerHTML = html;
-document.getElementById('jami').innerText = data.length;
+document.getElementById('royxat')
+.innerHTML = html;
+
+document.getElementById('jami')
+.innerText = data.length;
 
 });
 
 }
 
 function darkMode(){
+
 document.body.classList.toggle('dark');
+
 }
 
 function changeLang(lang){
+
 console.log(lang);
+
 }
 
 loadArizalar();
@@ -257,4 +325,5 @@ loadArizalar();
 </script>
 
 </body>
+
 </html>
