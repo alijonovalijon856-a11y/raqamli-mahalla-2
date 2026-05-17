@@ -6,11 +6,21 @@
 type="text"
 id="ism"
 placeholder="Ismingiz"
-/>
+style="
+width:100%;
+padding:10px;
+"
+>
 
 <br><br>
 
-<select id="tur">
+<select
+id="tur"
+style="
+width:100%;
+padding:10px;
+"
+>
 
 <option>Nafaqa</option>
 <option>Yordam</option>
@@ -20,15 +30,34 @@ placeholder="Ismingiz"
 
 <br><br>
 
+<div
+style="
+background:#2563eb;
+color:white;
+padding:14px;
+border-radius:10px;
+text-align:center;
+font-weight:bold;
+"
+>
+
+📎 Fayl tanlash pastda
+
+</div>
+
+<br>
+
 <input
 type="file"
 id="file"
 style="
-display:block;
+display:block !important;
+opacity:1 !important;
+visibility:visible !important;
 width:100%;
+background:white;
 padding:10px;
-border:1px solid #ccc;
-border-radius:8px;
+border:2px solid black;
 "
 >
 
@@ -37,6 +66,10 @@ border-radius:8px;
 <button
 class="send"
 onclick="yuborish()"
+style="
+width:100%;
+padding:12px;
+"
 >
 
 Yuborish
