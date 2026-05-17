@@ -1,41 +1,83 @@
-app.put(
-'/api/ariza/:id',
-verifyAdmin,
+const arizaSchema =
+new mongoose.Schema({
+
+ism:String,
+
+tur:String,
+
+user:String,
+
+status:String,
+
+tracking:String,
+
+hujjat:String
+
+});
+
+const Ariza =
+mongoose.model(
+'Ariza',
+arizaSchema
+);
+
+app.post(
+'/api/ariza',
+upload.single('hujjat'),
 async(req,res)=>{
 
 try{
 
-await Ariza.findByIdAndUpdate(
+const yangiAriza =
+new Ariza({
 
-req.params.id,
+ism:req.body.ism,
 
-{
-status:req.body.status
-}
+tur:req.body.tur,
 
-);
+user:req.body.user,
+
+hujjat:
+req.file
+? req.file.filename
+: '',
+
+status:'pending',
+
+tracking:
+'RM-' +
+Date.now()
+
+});
+
+await yangiAriza.save();
 
 bot.sendMessage(
-
 8458618683,
+`📥 Yangi ariza!
 
-`📌 Ariza statusi yangilandi:
+👤 ${req.body.ism}
 
-${req.body.status}`
+📌 ${req.body.tur}
 
+🆔 ${yangiAriza.tracking}`
 );
 
 res.json({
 
-message:"Status yangilandi"
+message:
+"Ariza yuborildi"
 
 });
 
 }catch(err){
 
+console.log(err);
+
 res.status(500).json({
 
-message:"Xatolik"
+message:
+"Saqlashda xatolik"
 
 });
 
