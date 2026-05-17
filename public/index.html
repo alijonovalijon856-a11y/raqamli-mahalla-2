@@ -144,6 +144,36 @@ flex:1;
 
 <input type="password" id="loginPass" placeholder="Parol">
 
+<input
+type="text"
+id="phone"
+placeholder="Telefon raqam"
+>
+
+<button
+class="send"
+onclick="otpYubor()"
+>
+
+📨 OTP yuborish
+
+</button>
+
+<input
+type="text"
+id="otp"
+placeholder="OTP kod"
+>
+
+<button
+class="send"
+onclick="otpTasdiqlash()"
+>
+
+🔐 OTP tasdiqlash
+
+</button>
+
 <button class="send" onclick="register()">
 Ro'yxatdan o'tish
 </button>
@@ -241,7 +271,9 @@ body:JSON.stringify({
 
 login:document.getElementById('loginUser').value,
 
-password:document.getElementById('loginPass').value
+password:document.getElementById('loginPass').value,
+
+phone:document.getElementById('phone').value
 
 })
 
@@ -290,6 +322,67 @@ document.getElementById('authBox')
 loadArizalar();
 
 }
+
+});
+
+}
+
+function otpYubor(){
+
+fetch('/api/send-otp',{
+
+method:'POST',
+
+headers:{
+'Content-Type':'application/json'
+},
+
+body:JSON.stringify({
+
+phone:
+document.getElementById('phone').value
+
+})
+
+})
+.then(res=>res.json())
+
+.then(data=>{
+
+alert(
+'OTP: ' + data.otp
+);
+
+});
+
+}
+
+function otpTasdiqlash(){
+
+fetch('/api/verify-otp',{
+
+method:'POST',
+
+headers:{
+'Content-Type':'application/json'
+},
+
+body:JSON.stringify({
+
+phone:
+document.getElementById('phone').value,
+
+otp:
+document.getElementById('otp').value
+
+})
+
+})
+.then(res=>res.json())
+
+.then(data=>{
+
+alert(data.message);
 
 });
 
