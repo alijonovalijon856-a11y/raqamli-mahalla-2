@@ -79,6 +79,23 @@ default:"pending"
 
 const Ariza = mongoose.model("Ariza", arizaSchema);
 
+const chatSchema = new mongoose.Schema({
+
+user:String,
+message:String,
+sender:String,
+time:{
+type:Date,
+default:Date.now
+}
+
+});
+
+const Chat = mongoose.model(
+"Chat",
+chatSchema
+);
+
 const token =
 '8849163719:AAEsdTitTyA4e6v7CCD5SSLeRjXvDgjmoao';
 
@@ -166,6 +183,57 @@ message:'Token xato'
 }
 
 }
+
+app.post('/api/chat', async(req,res)=>{
+
+try{
+
+const chat = new Chat({
+
+user:req.body.user,
+message:req.body.message,
+sender:req.body.sender
+
+});
+
+await chat.save();
+
+res.json({
+message:'Xabar yuborildi'
+});
+
+}catch(err){
+
+res.status(500).json({
+message:'Chat xatolik'
+});
+
+}
+
+});
+
+app.get('/api/chat/:user', async(req,res)=>{
+
+try{
+
+const chats =
+await Chat.find({
+
+user:req.params.user
+
+}).sort({time:1});
+
+res.json(chats);
+
+}catch(err){
+
+res.status(500).json({
+message:'Chat olish xatolik'
+});
+
+}
+
+});
 
 app.post('/api/send-otp', async(req,res)=>{
 
