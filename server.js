@@ -3,10 +3,13 @@ const path = require('path');
 const mongoose = require('mongoose');
 const TelegramBot = require('node-telegram-bot-api');
 const multer = require('multer');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+
+const SECRET = 'raqamli_mahalla_secret';
 
 app.use(express.json());
 
@@ -118,6 +121,84 @@ chatId,
 
 });
 
+function verifyAdmin(req,res,next){
+
+const authHeader =
+req.headers.authorization;
+
+if(!authHeader){
+
+return res.status(401).json({
+message:'Token yoq'
+});
+
+}
+
+const token =
+authHeader.split(' ')[1];
+
+try{
+
+const decoded =
+jwt.verify(token, SECRET);
+
+if(decoded.role !== 'admin'){
+
+return res.status(403).json({
+message:'Admin emas'
+});
+
+}
+
+next();
+
+}catch(err){
+
+return res.status(401).json({
+message:'Token xato'
+});
+
+}
+
+}
+
+app.post('/api/admin-login', async(req,res)=>{
+
+const { login,password } = req.body;
+
+if(
+login === 'admin'
+&&
+password === 'admin123'
+){
+
+const token = jwt.sign({
+
+role:'admin'
+
+}, SECRET, {
+
+expiresIn:'1d'
+
+});
+
+return res.json({
+
+message:'Admin kirdi',
+token
+
+});
+
+}
+
+res.status(401).json({
+
+message:'Admin login xato'
+
+});
+
+});
+
 app.post('/api/register', async(req,res)=>{
 
 const mavjud = await User.findOne({
@@ -194,7 +275,9 @@ message:"Xatolik"
 
 });
 
-app.get('/api/all', async(req,res)=>{
+app.get('/api/all',
+verifyAdmin,
+async(req,res)=>{
 
 try{
 
@@ -254,42 +337,9 @@ message:"Saqlashda xatolik"
 
 });
 
-app.post(
-'/api/upload',
-upload.single('file'),
+app.put('/api/ariza/:id',
+verifyAdmin,
 async(req,res)=>{
-
-try{
-
-if(!req.file){
-
-return res.status(400).json({
-message:"Fayl topilmadi"
-});
-
-}
-
-res.json({
-
-message:"Fayl yuklandi",
-
-file:'/uploads/' + req.file.filename
-
-});
-
-}catch(err){
-
-console.log(err);
-
-res.status(500).json({
-message:"Upload xatolik"
-});
-
-}
-
-});
-
-app.put('/api/ariza/:id', async(req,res)=>{
 
 try{
 
@@ -319,7 +369,9 @@ message:"Xatolik"
 
 });
 
-app.delete('/api/ariza/:id', async(req,res)=>{
+app.delete('/api/ariza/:id',
+verifyAdmin,
+async(req,res)=>{
 
 try{
 
