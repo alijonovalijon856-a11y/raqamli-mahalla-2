@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const TelegramBot = require('node-telegram-bot-api');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
+const PDFDocument = require('pdfkit');
 
 const app = express();
 
@@ -393,6 +394,66 @@ message:"O'chirildi"
 res.status(500).json({
 message:"Xatolik"
 });
+
+}
+
+});
+
+app.get('/api/pdf/:id',
+verifyAdmin,
+async(req,res)=>{
+
+try{
+
+const ariza =
+await Ariza.findById(req.params.id);
+
+if(!ariza){
+
+return res.status(404).send('Topilmadi');
+
+}
+
+const doc =
+new PDFDocument();
+
+res.setHeader(
+'Content-Type',
+'application/pdf'
+);
+
+res.setHeader(
+'Content-Disposition',
+'attachment; filename=ariza.pdf'
+);
+
+doc.pipe(res);
+
+doc.fontSize(22)
+.text('Raqamli Mahalla');
+
+doc.moveDown();
+
+doc.fontSize(16)
+.text('Ariza ma\'lumotlari');
+
+doc.moveDown();
+
+doc.text('Ism: ' + ariza.ism);
+
+doc.text('Tur: ' + ariza.tur);
+
+doc.text('User: ' + ariza.user);
+
+doc.text('Status: ' + ariza.status);
+
+doc.end();
+
+}catch(err){
+
+console.log(err);
+
+res.status(500).send('PDF xatolik');
 
 }
 
