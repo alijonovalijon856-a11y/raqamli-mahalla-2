@@ -1,34 +1,42 @@
-app.post('/api/ai', async(req,res)=>{
+app.post(
+'/api/ariza',
+upload.single('hujjat'),
+async(req,res)=>{
 
 try{
 
-const response =
-await openai.chat.completions.create({
+const yangiAriza =
+new Ariza({
 
-model:'gpt-4o-mini',
+ism:req.body.ism,
 
-messages:[
+tur:req.body.tur,
 
-{
-role:'system',
-content:
-'Siz Raqamli Mahalla AI assistantsiz. Foydalanuvchilarga davlat xizmatlari, nafaqa, subsidiya, moddiy yordam va arizalar bo‘yicha tushunarli yordam bering.'
-},
+user:req.body.user,
 
-{
-role:'user',
-content:req.body.message
-}
+hujjat:
+req.file
+? req.file.filename
+: '',
 
-]
+status:'pending'
 
 });
 
+await yangiAriza.save();
+
+bot.sendMessage(
+8458618683,
+`📥 Yangi ariza!
+
+👤 ${req.body.ism}
+
+📌 ${req.body.tur}`
+);
+
 res.json({
 
-reply:
-response.choices[0]
-.message.content
+message:"Ariza yuborildi"
 
 });
 
@@ -36,10 +44,9 @@ response.choices[0]
 
 console.log(err);
 
-res.json({
+res.status(500).json({
 
-reply:
-'❌ AI vaqtincha ishlamayapti'
+message:"Saqlashda xatolik"
 
 });
 
