@@ -1,227 +1,75 @@
-<!DOCTYPE html>
-<html lang="uz">
-
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Secure Admin Panel</title>
-
-<style>
-
-body{
-font-family:Arial;
-background:#f5f5f5;
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:10px;
-margin-bottom:20px;
-box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
-
-.item{
-border:1px solid #ddd;
-padding:15px;
-border-radius:8px;
-margin-top:10px;
-}
-
-button{
-padding:10px 15px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-margin-top:10px;
-margin-right:5px;
-}
-
-.approve{
-background:green;
-color:white;
-}
-
-.delete{
-background:red;
-color:white;
-}
-
-.pdf{
-background:#2563eb;
-color:white;
-}
-
-.stats{
-display:flex;
-gap:20px;
-flex-wrap:wrap;
-margin-bottom:20px;
-}
-
-.stat-box{
-flex:1;
-min-width:200px;
-background:#2563eb;
-color:white;
-padding:20px;
-border-radius:10px;
-font-size:20px;
-font-weight:bold;
-}
-
-input,select{
-width:100%;
-padding:10px;
-margin-top:10px;
-margin-bottom:10px;
-border:1px solid #ccc;
-border-radius:6px;
-}
-
-</style>
-</head>
-
-<body>
-
-<h1>🔐 Secure Admin Panel</h1>
-
-<div class="stats">
-
-<div class="stat-box">
-
-📊 Jami arizalar<br>
-<span id="jami">0</span>
-
-</div>
-
-<div class="stat-box">
-
-✅ Tasdiqlangan<br>
-<span id="tasdiq">0</span>
-
-</div>
-
-<div class="stat-box">
-
-⏳ Kutilmoqda<br>
-<span id="kutish">0</span>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>📋 Barcha arizalar</h2>
-
-<input
-type="text"
-id="search"
-placeholder="🔎 Ism qidirish"
-onkeyup="filterAriza()"
->
-
-<select id="statusFilter"
-onchange="filterAriza()">
-
-<option value="all">
-Barchasi
-</option>
-
-<option value="pending">
-Kutilmoqda
-</option>
-
-<option value="approved">
-Tasdiqlangan
-</option>
-
-</select>
-
-<div id="royxat"></div>
-
-</div>
-
 <script>
 
 const token =
 localStorage.getItem('adminToken');
 
-if(!token){
-
-alert("Admin login kerak");
-
-window.location.href = "/";
-
-}
+function loadArizalar(){
 
 fetch('/api/all',{
 
 headers:{
-Authorization:'Bearer ' + token
+
+Authorization:
+'Bearer ' + token
+
 }
 
 })
-
 .then(res=>res.json())
 
 .then(data=>{
 
-if(!Array.isArray(data)){
+document.getElementById(
+'jami'
+).innerText = data.length;
 
-alert("Admin token xato");
-
-window.location.href = "/";
-
-return;
-
-}
-
-window.allData = data;
-
-document.getElementById('jami')
-.innerText = data.length;
-
-const tasdiq =
+document.getElementById(
+'tasdiq'
+).innerText =
 data.filter(
-a => a.status === 'approved'
+a=>a.status==='approved'
 ).length;
 
-document.getElementById('tasdiq')
-.innerText = tasdiq;
-
-document.getElementById('kutish')
-.innerText =
-data.length - tasdiq;
-
-renderAriza(data);
-
-});
-
-function renderAriza(data){
+document.getElementById(
+'pending'
+).innerText =
+data.filter(
+a=>a.status==='pending'
+).length;
 
 let html='';
 
-for(let i=0;i<data.length;i++){
+data.forEach(item=>{
 
 html += `
 
 <div class="item">
 
-<b>${data[i].ism}</b><br>
+<b>${item.ism}</b><br>
 
-Tur: ${data[i].tur}<br>
+Tur: ${item.tur}<br>
 
-Status: ${data[i].status}<br>
+Status: ${item.status}<br>
 
-User: ${data[i].user}<br>
+User: ${item.user}
+
+<br><br>
+
+<a
+href="/uploads/${item.hujjat}"
+target="_blank"
+>
+
+📄 Hujjatni ko'rish
+
+</a>
+
+<br><br>
 
 <button
-class="approve"
-onclick="tasdiqlash('${data[i]._id}')"
+onclick="tasdiqlash(
+'${item._id}'
+)"
 >
 
 ✅ Tasdiqlash
@@ -229,20 +77,12 @@ onclick="tasdiqlash('${data[i]._id}')"
 </button>
 
 <button
-class="delete"
-onclick="ochirish('${data[i]._id}')"
+onclick="ochirish(
+'${item._id}'
+)"
 >
 
 🗑 O'chirish
-
-</button>
-
-<button
-class="pdf"
-onclick="pdfYukla('${data[i]._id}')"
->
-
-📄 PDF
 
 </button>
 
@@ -250,41 +90,13 @@ onclick="pdfYukla('${data[i]._id}')"
 
 `;
 
-}
+});
 
-document.getElementById('royxat')
-.innerHTML = html;
+document.getElementById(
+'royxat'
+).innerHTML = html;
 
-}
-
-function filterAriza(){
-
-const qidiruv =
-document.getElementById('search')
-.value.toLowerCase();
-
-const status =
-document.getElementById('statusFilter')
-.value;
-
-let filtered =
-window.allData;
-
-if(status !== 'all'){
-
-filtered = filtered.filter(
-a => a.status === status
-);
-
-}
-
-filtered = filtered.filter(
-a =>
-a.ism.toLowerCase()
-.includes(qidiruv)
-);
-
-renderAriza(filtered);
+});
 
 }
 
@@ -295,7 +107,10 @@ fetch('/api/ariza/' + id,{
 method:'PUT',
 
 headers:{
-Authorization:'Bearer ' + token
+
+Authorization:
+'Bearer ' + token
+
 }
 
 })
@@ -305,7 +120,7 @@ Authorization:'Bearer ' + token
 
 alert(data.message);
 
-location.reload();
+loadArizalar();
 
 });
 
@@ -318,7 +133,10 @@ fetch('/api/ariza/' + id,{
 method:'DELETE',
 
 headers:{
-Authorization:'Bearer ' + token
+
+Authorization:
+'Bearer ' + token
+
 }
 
 })
@@ -328,26 +146,12 @@ Authorization:'Bearer ' + token
 
 alert(data.message);
 
-location.reload();
+loadArizalar();
 
 });
 
 }
 
-function pdfYukla(id){
-
-window.open(
-
-'/api/pdf/' + id,
-
-'_blank'
-
-);
-
-}
+loadArizalar();
 
 </script>
-
-</body>
-
-</html>
