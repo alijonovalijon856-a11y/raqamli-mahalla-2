@@ -1,74 +1,46 @@
-<script>
+<div class="card">
 
-function yuborish(){
+<h2>Ariza yuborish</h2>
 
-const ism =
-document.getElementById('ism').value;
+<input
+type="text"
+id="ism"
+placeholder="Ismingiz"
+/>
 
-const tur =
-document.getElementById('tur').value;
+<br><br>
 
-if(currentUser === ""){
+<select id="tur">
 
-alert("Avval login qiling");
+<option>Nafaqa</option>
+<option>Yordam</option>
+<option>Subsidiya</option>
 
-return;
+</select>
 
-}
+<br><br>
 
-const formData =
-new FormData();
+<input
+type="file"
+id="file"
+style="
+display:block;
+width:100%;
+padding:10px;
+border:1px solid #ccc;
+border-radius:8px;
+"
+>
 
-formData.append(
-'ism',
-ism
-);
+<br><br>
 
-formData.append(
-'tur',
-tur
-);
+<button
+class="send"
+onclick="yuborish()"
+>
 
-formData.append(
-'user',
-currentUser
-);
+Yuborish
 
-formData.append(
-'hujjat',
-document.getElementById('file')
-.files[0]
-);
+</button>
 
-fetch('/api/ariza',{
-
-method:'POST',
-
-body:formData
-
-})
-.then(res=>res.json())
-
-.then(data=>{
-
-alert(data.message);
-
-showToast(
-'📨 Ariza yuborildi'
-);
-
-document.getElementById(
-'ism'
-).value = "";
-
-document.getElementById(
-'file'
-).value = "";
-
-loadArizalar();
-
-});
-
-}
-
-</script>
+</div>
