@@ -185,6 +185,47 @@ message:'Token xato'
 
 }
 
+app.post('/api/ai', async(req,res)=>{
+
+const text =
+req.body.message.toLowerCase();
+
+let javob =
+"🤖 Savolingiz qabul qilindi.";
+
+if(text.includes('nafaqa')){
+
+javob =
+"📌 Nafaqa uchun pasport va daromad ma'lumoti kerak.";
+
+}
+else if(text.includes('subsidiya')){
+
+javob =
+"📌 Subsidiya uchun uy joy hujjati kerak.";
+
+}
+else if(text.includes('yordam')){
+
+javob =
+"📌 Moddiy yordam uchun online ariza yuboring.";
+
+}
+else if(text.includes('salom')){
+
+javob =
+"🤖 Assalomu alaykum. Sizga qanday yordam bera olaman?";
+
+}
+
+res.json({
+
+reply:javob
+
+});
+
+});
+
 app.post('/api/chat', async(req,res)=>{
 
 try{
