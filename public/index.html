@@ -266,6 +266,36 @@ Yuborish
 
 <div id="royxat"></div>
 
+<hr>
+
+<h3>💬 Live Chat Support</h3>
+
+<div id="chatBox"
+style="
+height:250px;
+overflow:auto;
+border:1px solid #ccc;
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+">
+</div>
+
+<input
+type="text"
+id="chatInput"
+placeholder="Xabar yozing"
+>
+
+<button
+class="send"
+onclick="chatYubor()"
+>
+
+📨 Yuborish
+
+</button>
+
 </div>
 
 </div>
@@ -358,6 +388,8 @@ document.getElementById('authBox')
 .style.display = "none";
 
 loadArizalar();
+
+loadChat();
 
 }
 
@@ -534,6 +566,89 @@ showToast(
 });
 
 }
+
+function loadChat(){
+
+if(currentUser === "") return;
+
+fetch('/api/chat/' + currentUser)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+let html='';
+
+for(let i=0;i<data.length;i++){
+
+html += `
+
+<div style="
+margin-bottom:10px;
+padding:8px;
+border-radius:8px;
+background:
+${data[i].sender === 'admin'
+? '#dbeafe'
+: '#dcfce7'}
+">
+
+<b>${data[i].sender}</b><br>
+
+${data[i].message}
+
+</div>
+
+`;
+
+}
+
+document.getElementById('chatBox')
+.innerHTML = html;
+
+});
+
+}
+
+function chatYubor(){
+
+const message =
+document.getElementById('chatInput').value;
+
+fetch('/api/chat',{
+
+method:'POST',
+
+headers:{
+'Content-Type':'application/json'
+},
+
+body:JSON.stringify({
+
+user:currentUser,
+message:message,
+sender:'user'
+
+})
+
+})
+.then(res=>res.json())
+
+.then(data=>{
+
+document.getElementById(
+'chatInput'
+).value='';
+
+loadChat();
+
+showToast('💬 Xabar yuborildi');
+
+});
+
+}
+
+setInterval(loadChat,3000);
 
 function darkMode(){
 
