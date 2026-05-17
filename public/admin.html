@@ -49,6 +49,11 @@ background:red;
 color:white;
 }
 
+.pdf{
+background:#2563eb;
+color:white;
+}
+
 .stats{
 display:flex;
 gap:20px;
@@ -232,6 +237,15 @@ onclick="ochirish('${data[i]._id}')"
 
 </button>
 
+<button
+class="pdf"
+onclick="pdfYukla('${data[i]._id}')"
+>
+
+📄 PDF
+
+</button>
+
 </div>
 
 `;
@@ -317,6 +331,18 @@ alert(data.message);
 location.reload();
 
 });
+
+}
+
+function pdfYukla(id){
+
+window.open(
+
+'/api/pdf/' + id,
+
+'_blank'
+
+);
 
 }
 
