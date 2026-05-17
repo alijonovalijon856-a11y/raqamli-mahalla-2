@@ -400,7 +400,6 @@ message:"Xatolik"
 });
 
 app.get('/api/pdf/:id',
-verifyAdmin,
 async(req,res)=>{
 
 try{
