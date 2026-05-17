@@ -12,6 +12,8 @@ const PORT = process.env.PORT || 3000;
 
 const SECRET = 'raqamli_mahalla_secret';
 
+const otpStore = {};
+
 app.use(express.json());
 
 app.use(express.urlencoded({ extended:true }));
@@ -54,6 +56,8 @@ const userSchema = new mongoose.Schema({
 
 login:String,
 password:String,
+phone:String,
+verified:Boolean,
 role:String
 
 });
@@ -163,6 +167,53 @@ message:'Token xato'
 
 }
 
+app.post('/api/send-otp', async(req,res)=>{
+
+const { phone } = req.body;
+
+const otp =
+Math.floor(
+100000 + Math.random() * 900000
+).toString();
+
+otpStore[phone] = otp;
+
+console.log('OTP:', otp);
+
+res.json({
+
+message:'OTP yuborildi',
+
+otp
+
+});
+
+});
+
+app.post('/api/verify-otp', async(req,res)=>{
+
+const { phone, otp } = req.body;
+
+if(otpStore[phone] === otp){
+
+delete otpStore[phone];
+
+return res.json({
+
+message:'Telefon tasdiqlandi'
+
+});
+
+}
+
+res.status(400).json({
+
+message:'OTP xato'
+
+});
+
+});
+
 app.post('/api/admin-login', async(req,res)=>{
 
 const { login,password } = req.body;
@@ -218,6 +269,8 @@ const user = new User({
 
 login:req.body.login,
 password:req.body.password,
+phone:req.body.phone || '',
+verified:true,
 role:"user"
 
 });
