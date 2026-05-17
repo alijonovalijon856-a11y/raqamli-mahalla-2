@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Professional Admin Panel</title>
+<title>Secure Admin Panel</title>
 
 <style>
 
@@ -81,7 +81,7 @@ border-radius:6px;
 
 <body>
 
-<h1>👨‍💼 Professional Admin Panel</h1>
+<h1>🔐 Secure Admin Panel</h1>
 
 <div class="stats">
 
@@ -142,11 +142,38 @@ Tasdiqlangan
 
 <script>
 
-fetch('/api/all')
+const token =
+localStorage.getItem('adminToken');
+
+if(!token){
+
+alert("Admin login kerak");
+
+window.location.href = "/";
+
+}
+
+fetch('/api/all',{
+
+headers:{
+Authorization:'Bearer ' + token
+}
+
+})
 
 .then(res=>res.json())
 
 .then(data=>{
+
+if(!Array.isArray(data)){
+
+alert("Admin token xato");
+
+window.location.href = "/";
+
+return;
+
+}
 
 window.allData = data;
 
@@ -251,7 +278,11 @@ function tasdiqlash(id){
 
 fetch('/api/ariza/' + id,{
 
-method:'PUT'
+method:'PUT',
+
+headers:{
+Authorization:'Bearer ' + token
+}
 
 })
 .then(res=>res.json())
@@ -270,7 +301,11 @@ function ochirish(id){
 
 fetch('/api/ariza/' + id,{
 
-method:'DELETE'
+method:'DELETE',
+
+headers:{
+Authorization:'Bearer ' + token
+}
 
 })
 .then(res=>res.json())
