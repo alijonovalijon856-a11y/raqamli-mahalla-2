@@ -1,52 +1,41 @@
-app.post(
-'/api/ariza',
-upload.single('hujjat'),
+app.put(
+'/api/ariza/:id',
+verifyAdmin,
 async(req,res)=>{
 
 try{
 
-const yangiAriza =
-new Ariza({
+await Ariza.findByIdAndUpdate(
 
-ism:req.body.ism,
+req.params.id,
 
-tur:req.body.tur,
+{
+status:req.body.status
+}
 
-user:req.body.user,
-
-hujjat:
-req.file
-? req.file.filename
-: '',
-
-status:'pending'
-
-});
-
-await yangiAriza.save();
+);
 
 bot.sendMessage(
+
 8458618683,
-`📥 Yangi ariza!
 
-👤 ${req.body.ism}
+`📌 Ariza statusi yangilandi:
 
-📌 ${req.body.tur}`
+${req.body.status}`
+
 );
 
 res.json({
 
-message:"Ariza yuborildi"
+message:"Status yangilandi"
 
 });
 
 }catch(err){
 
-console.log(err);
-
 res.status(500).json({
 
-message:"Saqlashda xatolik"
+message:"Xatolik"
 
 });
 
