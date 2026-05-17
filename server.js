@@ -7,6 +7,16 @@ const jwt = require('jsonwebtoken');
 const PDFDocument = require('pdfkit');
 const bcrypt = require('bcrypt');
 
+require('dotenv').config();
+
+const OpenAI = require('openai');
+
+const openai = new OpenAI({
+
+apiKey:process.env.OPENAI_API_KEY
+
+});
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -187,42 +197,50 @@ message:'Token xato'
 
 app.post('/api/ai', async(req,res)=>{
 
-const text =
-req.body.message.toLowerCase();
+try{
 
-let javob =
-"🤖 Savolingiz qabul qilindi.";
+const response =
+await openai.chat.completions.create({
 
-if(text.includes('nafaqa')){
+model:'gpt-4.1-mini',
 
-javob =
-"📌 Nafaqa uchun pasport va daromad ma'lumoti kerak.";
+messages:[
 
+{
+role:'system',
+content:
+'Siz Raqamli Mahalla AI assistantsiz.'
+},
+
+{
+role:'user',
+content:req.body.message
 }
-else if(text.includes('subsidiya')){
 
-javob =
-"📌 Subsidiya uchun uy joy hujjati kerak.";
+]
 
-}
-else if(text.includes('yordam')){
-
-javob =
-"📌 Moddiy yordam uchun online ariza yuboring.";
-
-}
-else if(text.includes('salom')){
-
-javob =
-"🤖 Assalomu alaykum. Sizga qanday yordam bera olaman?";
-
-}
+});
 
 res.json({
 
-reply:javob
+reply:
+response.choices[0]
+.message.content
 
 });
+
+}catch(err){
+
+console.log(err);
+
+res.json({
+
+reply:
+'❌ AI vaqtincha ishlamayapti'
+
+});
+
+}
 
 });
 
