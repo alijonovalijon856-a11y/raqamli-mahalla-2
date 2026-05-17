@@ -12,6 +12,8 @@ id="ism"
 placeholder="Ismingiz"
 >
 
+<br><br>
+
 <select id="tur">
 
 <option>Nafaqa</option>
@@ -27,6 +29,8 @@ placeholder="Ismingiz"
 <input
 type="file"
 id="file"
+style="display:block;width:100%;"
+
 >
 
 <br><br>
@@ -41,3 +45,78 @@ Yuborish
 </button>
 
 </div>
+
+<script>
+
+function yuborish(){
+
+const ism =
+document.getElementById('ism').value;
+
+const tur =
+document.getElementById('tur').value;
+
+if(currentUser === ""){
+
+alert("Avval login qiling");
+
+return;
+
+}
+
+const formData =
+new FormData();
+
+formData.append(
+'ism',
+ism
+);
+
+formData.append(
+'tur',
+tur
+);
+
+formData.append(
+'user',
+currentUser
+);
+
+formData.append(
+'hujjat',
+document.getElementById('file')
+.files[0]
+);
+
+fetch('/api/ariza',{
+
+method:'POST',
+
+body:formData
+
+})
+.then(res=>res.json())
+
+.then(data=>{
+
+alert(data.message);
+
+showToast(
+'📨 Ariza yuborildi'
+);
+
+document.getElementById(
+'ism'
+).value = "";
+
+document.getElementById(
+'file'
+).value = "";
+
+loadArizalar();
+
+});
+
+}
+
+</script>
