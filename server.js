@@ -5,6 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const PDFDocument = require('pdfkit');
+const bcrypt = require('bcrypt');
 
 const app = express();
 
@@ -333,10 +334,16 @@ message:"User mavjud"
 
 }
 
+const hashedPassword =
+await bcrypt.hash(
+req.body.password,
+10
+);
+
 const user = new User({
 
 login:req.body.login,
-password:req.body.password,
+password:hashedPassword,
 phone:req.body.phone || '',
 verified:true,
 role:"user"
@@ -355,12 +362,25 @@ app.post('/api/login', async(req,res)=>{
 
 const user = await User.findOne({
 
-login:req.body.login,
-password:req.body.password
+login:req.body.login
 
 });
 
 if(!user){
+
+return res.status(401).json({
+message:"Login yoki parol xato"
+});
+
+}
+
+const match =
+await bcrypt.compare(
+req.body.password,
+user.password
+);
+
+if(!match){
 
 return res.status(401).json({
 message:"Login yoki parol xato"
