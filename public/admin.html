@@ -287,6 +287,36 @@ margin-top:20px;
 
 }
 
+input,
+select{
+
+width:100%;
+
+padding:15px;
+
+border:none;
+
+outline:none;
+
+border-radius:15px;
+
+margin-top:15px;
+
+background:
+rgba(255,255,255,0.08);
+
+color:white;
+
+font-size:16px;
+
+}
+
+option{
+
+background:#0f172a;
+
+}
+
 @media(max-width:700px){
 
 .logo{
@@ -373,6 +403,48 @@ onclick="logout()"
 </h2>
 
 <canvas id="myChart"></canvas>
+
+</div>
+
+<div class="chart-box">
+
+<h2>
+
+🔎 Search & Filter
+
+</h2>
+
+<input
+type="text"
+id="searchInput"
+placeholder="Ism bo‘yicha qidirish"
+onkeyup="searchAriza()"
+/>
+
+<select
+id="filterStatus"
+onchange="searchAriza()"
+>
+
+<option value="all">
+
+Barcha status
+
+</option>
+
+<option value="Tasdiqlandi">
+
+Tasdiqlangan
+
+</option>
+
+<option value="Jarayonda">
+
+Jarayonda
+
+</option>
+
+</select>
 
 </div>
 
@@ -557,6 +629,57 @@ backgroundColor:[
 ]
 
 }]
+
+}
+
+});
+
+}
+
+function searchAriza(){
+
+const search =
+document.getElementById(
+'searchInput'
+).value.toLowerCase();
+
+const status =
+document.getElementById(
+'filterStatus'
+).value;
+
+const items =
+document.querySelectorAll(
+'.item'
+);
+
+items.forEach(item=>{
+
+const text =
+item.innerText.toLowerCase();
+
+const statusMatch =
+status === 'all'
+|| text.includes(
+status.toLowerCase()
+);
+
+const searchMatch =
+text.includes(search);
+
+if(
+searchMatch
+&&
+statusMatch
+){
+
+item.style.display =
+'block';
+
+}else{
+
+item.style.display =
+'none';
 
 }
 
