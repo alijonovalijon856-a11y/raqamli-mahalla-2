@@ -33,7 +33,9 @@ linear-gradient(
 
 min-height:100vh;
 
-padding:30px;
+padding:20px;
+
+padding-bottom:120px;
 
 color:white;
 
@@ -361,6 +363,75 @@ min-height:80px;
 
 }
 
+.bottom-nav{
+
+position:fixed;
+
+bottom:15px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+width:95%;
+
+max-width:500px;
+
+display:flex;
+
+justify-content:space-around;
+
+align-items:center;
+
+padding:15px;
+
+border-radius:25px;
+
+background:
+rgba(255,255,255,0.08);
+
+backdrop-filter:blur(20px);
+
+border:
+1px solid rgba(255,255,255,0.1);
+
+box-shadow:
+0 8px 30px rgba(0,0,0,0.4);
+
+z-index:999;
+
+}
+
+.nav-item{
+
+text-align:center;
+
+font-size:15px;
+
+cursor:pointer;
+
+opacity:0.8;
+
+transition:0.3s;
+
+}
+
+.nav-item:hover{
+
+transform:translateY(-5px);
+
+opacity:1;
+
+}
+
+.active{
+
+color:#38bdf8;
+
+font-weight:bold;
+
+}
+
 @media(max-width:700px){
 
 .logo{
@@ -372,6 +443,8 @@ font-size:26px;
 body{
 
 padding:15px;
+
+padding-bottom:120px;
 
 }
 
@@ -579,6 +652,48 @@ Xabar yuborish
 <div class="footer">
 
 © 2026 Raqamli Mahalla • Premium Edition
+
+</div>
+
+</div>
+
+<div class="bottom-nav">
+
+<div class="nav-item active">
+
+🏠
+<br>
+Asosiy
+
+</div>
+
+<div class="nav-item">
+
+📨
+<br>
+Arizalar
+
+</div>
+
+<div class="nav-item">
+
+🤖
+<br>
+AI
+
+</div>
+
+<div
+class="nav-item"
+onclick="
+window.location.href=
+'/cabinet.html'
+"
+>
+
+👤
+<br>
+Kabinet
 
 </div>
 
