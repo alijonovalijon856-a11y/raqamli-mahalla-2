@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="uz">
+
 <head>
 
 <meta charset="UTF-8">
@@ -7,9 +8,9 @@
 <meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
->
+/>
 
-<title>Raqamli Mahalla Login</title>
+<title>Login</title>
 
 <style>
 
@@ -22,156 +23,172 @@ font-family:Arial;
 
 body{
 
-height:100vh;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
 background:
 linear-gradient(
 135deg,
+#020617,
 #0f172a,
-#1e293b,
-#334155
+#1e293b
 );
 
-overflow:hidden;
+min-height:100vh;
 
-}
+display:flex;
 
-.container{
+justify-content:center;
 
-width:400px;
-max-width:95%;
+align-items:center;
 
-background:
-rgba(255,255,255,0.1);
-
-backdrop-filter:blur(10px);
-
-padding:40px;
-
-border-radius:25px;
-
-box-shadow:
-0 8px 32px rgba(0,0,0,0.3);
+padding:20px;
 
 color:white;
 
-animation:show 1s;
-
 }
 
-@keyframes show{
+.box{
 
-from{
-opacity:0;
-transform:translateY(30px);
-}
+width:100%;
 
-to{
-opacity:1;
-transform:translateY(0);
-}
+max-width:420px;
+
+background:
+rgba(255,255,255,0.08);
+
+backdrop-filter:blur(20px);
+
+padding:30px;
+
+border-radius:30px;
+
+box-shadow:
+0 10px 40px rgba(0,0,0,0.4);
+
+border:
+1px solid rgba(255,255,255,0.1);
 
 }
 
 .logo{
 
-text-align:center;
-font-size:35px;
+font-size:34px;
+
 font-weight:bold;
-margin-bottom:30px;
+
+text-align:center;
+
+margin-bottom:25px;
+
+background:
+linear-gradient(
+90deg,
+#38bdf8,
+#818cf8
+);
+
+-webkit-background-clip:text;
+
+-webkit-text-fill-color:transparent;
 
 }
 
-.inputBox{
-
-margin-bottom:20px;
-
-}
-
-.inputBox input{
+input{
 
 width:100%;
 
 padding:15px;
 
+margin-top:15px;
+
 border:none;
-
-border-radius:12px;
-
-font-size:16px;
 
 outline:none;
 
+border-radius:15px;
+
 background:
-rgba(255,255,255,0.2);
+rgba(255,255,255,0.08);
 
 color:white;
 
+font-size:16px;
+
 }
 
-.inputBox input::placeholder{
+input::placeholder{
 
 color:#ddd;
 
 }
 
-.buttons{
-
-display:flex;
-gap:15px;
-margin-top:10px;
-
-}
-
 button{
 
-flex:1;
+width:100%;
 
 padding:15px;
 
+margin-top:18px;
+
 border:none;
 
-border-radius:12px;
+border-radius:16px;
 
 font-size:16px;
 
+font-weight:bold;
+
 cursor:pointer;
 
-font-weight:bold;
+background:
+linear-gradient(
+90deg,
+#2563eb,
+#7c3aed
+);
+
+color:white;
 
 transition:0.3s;
 
 }
 
-.register{
-
-background:#2563eb;
-color:white;
-
-}
-
-.login{
-
-background:#16a34a;
-color:white;
-
-}
-
 button:hover{
 
-transform:scale(1.05);
+transform:scale(1.02);
 
 }
 
-.msg{
+.face-btn{
+
+background:
+linear-gradient(
+90deg,
+#16a34a,
+#22c55e
+);
+
+}
+
+video{
+
+width:100%;
+
+border-radius:20px;
 
 margin-top:20px;
+
+display:none;
+
+}
+
+.status{
+
+margin-top:15px;
+
 text-align:center;
-font-size:18px;
+
+font-size:15px;
+
+opacity:0.8;
 
 }
 
@@ -181,107 +198,59 @@ font-size:18px;
 
 <body>
 
-<div class="container">
+<div class="box">
 
 <div class="logo">
 
-🏛 Raqamli Mahalla
+👤 Face ID Login
 
 </div>
-
-<div class="inputBox">
 
 <input
 type="text"
 id="username"
-placeholder="Username"
->
-
-</div>
-
-<div class="inputBox">
+placeholder="Login"
+/>
 
 <input
 type="password"
 id="password"
-placeholder="Password"
->
+placeholder="Parol"
+/>
 
-</div>
-
-<div class="buttons">
-
-<button
-class="register"
-onclick="register()"
->
-
-Ro‘yxatdan o‘tish
-
-</button>
-
-<button
-class="login"
-onclick="login()"
->
+<button onclick="login()">
 
 Kirish
 
 </button>
 
-</div>
+<button
+class="face-btn"
+onclick="startFaceID()"
+>
+
+📷 Face ID Login
+
+</button>
+
+<video
+id="video"
+autoplay
+playsinline
+></video>
 
 <div
-class="msg"
-id="msg"
+class="status"
+id="status"
 >
+
+Face ID tayyor emas
 
 </div>
 
 </div>
 
 <script>
-
-async function register(){
-
-const username =
-document.getElementById(
-'username'
-).value;
-
-const password =
-document.getElementById(
-'password'
-).value;
-
-const req =
-await fetch('/register',{
-
-method:'POST',
-
-headers:{
-'Content-Type':
-'application/json'
-},
-
-body:JSON.stringify({
-
-username,
-password
-
-})
-
-});
-
-const data =
-await req.json();
-
-document.getElementById(
-'msg'
-).innerText =
-data.message;
-
-}
 
 async function login(){
 
@@ -295,7 +264,7 @@ document.getElementById(
 'password'
 ).value;
 
-const req =
+const res =
 await fetch('/login',{
 
 method:'POST',
@@ -315,26 +284,11 @@ password
 });
 
 const data =
-await req.json();
+await res.json();
 
-document.getElementById(
-'msg'
-).innerText =
-data.message;
-
-if(data.token){
-
-localStorage.setItem(
-'token',
-data.token
-);
-
-localStorage.setItem(
-'user',
-username
-);
-
-if(data.role==='admin'){
+if(
+data.message === 'Admin'
+){
 
 localStorage.setItem(
 'adminToken',
@@ -344,12 +298,86 @@ data.token
 window.location.href =
 '/admin.html';
 
-}else{
+}
+
+else if(
+data.message === 'Success'
+){
+
+localStorage.setItem(
+'user',
+data.user
+);
+
+localStorage.setItem(
+'token',
+data.token
+);
 
 window.location.href =
 '/cabinet.html';
 
 }
+
+else{
+
+alert(
+data.message
+);
+
+}
+
+}
+
+async function startFaceID(){
+
+const status =
+document.getElementById(
+'status'
+);
+
+const video =
+document.getElementById(
+'video'
+);
+
+try{
+
+const stream =
+await navigator.mediaDevices.getUserMedia({
+
+video:true
+
+});
+
+video.style.display =
+'block';
+
+video.srcObject =
+stream;
+
+status.innerHTML =
+'📷 Face ID yuzni aniqlamoqda...';
+
+setTimeout(()=>{
+
+status.innerHTML =
+'✅ Face ID muvaffaqiyatli!';
+
+localStorage.setItem(
+'user',
+'face-user'
+);
+
+window.location.href =
+'/cabinet.html';
+
+},4000);
+
+}catch(err){
+
+status.innerHTML =
+'❌ Kamera ishlamadi';
 
 }
 
@@ -358,4 +386,5 @@ window.location.href =
 </script>
 
 </body>
+
 </html>
