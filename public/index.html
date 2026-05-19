@@ -10,7 +10,7 @@ name="viewport"
 content="width=device-width, initial-scale=1.0"
 />
 
-<title>Raqamli Mahalla</title>
+<title>Raqamli Mahalla AI</title>
 
 <style>
 
@@ -95,40 +95,6 @@ linear-gradient(
 -webkit-background-clip:text;
 
 -webkit-text-fill-color:transparent;
-
-}
-
-.langs{
-
-display:flex;
-
-gap:10px;
-
-}
-
-.lang{
-
-padding:10px 16px;
-
-border:none;
-
-border-radius:12px;
-
-background:
-rgba(255,255,255,0.08);
-
-color:white;
-
-cursor:pointer;
-
-transition:0.3s;
-
-}
-
-.lang:hover{
-
-background:
-rgba(255,255,255,0.2);
 
 }
 
@@ -256,7 +222,15 @@ opacity:0.95;
 
 }
 
-.file-box{
+.ai-box{
+
+height:150px;
+
+resize:none;
+
+}
+
+.ai-result{
 
 margin-top:15px;
 
@@ -264,33 +238,14 @@ padding:18px;
 
 border-radius:18px;
 
-border:
-2px dashed rgba(255,255,255,0.3);
-
 background:
-rgba(255,255,255,0.05);
+rgba(255,255,255,0.08);
 
-text-align:center;
+line-height:1.8;
 
-}
+min-height:120px;
 
-.stat{
-
-font-size:50px;
-
-font-weight:bold;
-
-margin-top:15px;
-
-color:#38bdf8;
-
-}
-
-.ai-box{
-
-height:130px;
-
-resize:none;
+font-size:17px;
 
 }
 
@@ -303,63 +258,6 @@ text-align:center;
 opacity:0.7;
 
 font-size:15px;
-
-}
-
-.live{
-
-display:flex;
-
-flex-direction:column;
-
-gap:12px;
-
-}
-
-.msg{
-
-padding:12px;
-
-border-radius:14px;
-
-background:
-rgba(255,255,255,0.08);
-
-}
-
-.top-badge{
-
-display:inline-block;
-
-padding:8px 14px;
-
-border-radius:999px;
-
-background:
-rgba(56,189,248,0.15);
-
-color:#38bdf8;
-
-margin-bottom:15px;
-
-font-size:14px;
-
-}
-
-.ai-result{
-
-margin-top:15px;
-
-padding:15px;
-
-border-radius:16px;
-
-background:
-rgba(255,255,255,0.08);
-
-line-height:1.8;
-
-min-height:80px;
 
 }
 
@@ -432,6 +330,42 @@ font-weight:bold;
 
 }
 
+.typing{
+
+display:inline-block;
+
+overflow:hidden;
+
+border-right:2px solid white;
+
+white-space:nowrap;
+
+animation:
+typing 3s steps(40,end),
+blink 0.8s infinite;
+
+}
+
+@keyframes typing{
+
+from{
+width:0;
+}
+
+to{
+width:100%;
+}
+
+}
+
+@keyframes blink{
+
+50%{
+border-color:transparent;
+}
+
+}
+
 @media(max-width:700px){
 
 .logo{
@@ -462,121 +396,13 @@ padding-bottom:120px;
 
 <div class="logo">
 
-🏛 Raqamli Mahalla
-
-</div>
-
-<div class="langs">
-
-<button
-class="lang"
-onclick="setLang('uz')"
->
-
-🇺🇿 UZ
-
-</button>
-
-<button
-class="lang"
-onclick="setLang('ru')"
->
-
-🇷🇺 RU
-
-</button>
-
-<button
-class="lang"
-onclick="setLang('en')"
->
-
-🇬🇧 EN
-
-</button>
+🤖 Raqamli Mahalla AI
 
 </div>
 
 </div>
 
 <div class="grid">
-
-<div class="card">
-
-<div class="top-badge">
-
-AI Powered Government Platform
-
-</div>
-
-<h2 id="arizaTitle">
-
-📨 Ariza yuborish
-
-</h2>
-
-<input
-type="text"
-id="ism"
-placeholder="Ismingiz"
-/>
-
-<select id="tur">
-
-<option>Nafaqa</option>
-
-<option>Moddiy yordam</option>
-
-<option>Subsidiya</option>
-
-<option>Ish so‘rovi</option>
-
-<option>Kommunal yordam</option>
-
-<option>Davolanish yordami</option>
-
-</select>
-
-<div class="file-box">
-
-📎 Hujjat yuklash
-
-<input
-type="file"
-id="file"
-/>
-
-</div>
-
-<button onclick="yuborish()">
-
-Yuborish
-
-</button>
-
-</div>
-
-<div class="card">
-
-<h2 id="statTitle">
-
-📊 Statistika
-
-</h2>
-
-<div class="stat" id="count">
-
-128
-
-</div>
-
-<p id="statText">
-
-Bugungi arizalar
-
-</p>
-
-</div>
 
 <div class="card">
 
@@ -613,35 +439,31 @@ id="aiResult"
 
 <h2>
 
-💬 Live Chat
+📨 Tezkor xizmatlar
 
 </h2>
 
-<div class="live">
+<button onclick="quick('nafaqa')">
 
-<div class="msg">
+Nafaqa haqida
 
-👨‍💼 Operator:
-Assalomu alaykum
+</button>
 
-</div>
+<button onclick="quick('subsidiya')">
 
-<div class="msg">
+Subsidiya haqida
 
-🧑 Siz:
-Salom
+</button>
 
-</div>
+<button onclick="quick('moddiy yordam')">
 
-</div>
+Moddiy yordam
 
-<textarea
-placeholder="Xabar yozing"
-></textarea>
+</button>
 
-<button>
+<button onclick="quick('ish')">
 
-Xabar yuborish
+Ish so‘rovi
 
 </button>
 
@@ -651,7 +473,7 @@ Xabar yuborish
 
 <div class="footer">
 
-© 2026 Raqamli Mahalla • Premium Edition
+© 2026 Raqamli Mahalla AI System
 
 </div>
 
@@ -659,7 +481,12 @@ Xabar yuborish
 
 <div class="bottom-nav">
 
-<div class="nav-item active">
+<div
+class="nav-item"
+onclick="
+window.location.href='/'
+"
+>
 
 🏠
 <br>
@@ -667,15 +494,7 @@ Asosiy
 
 </div>
 
-<div class="nav-item">
-
-📨
-<br>
-Arizalar
-
-</div>
-
-<div class="nav-item">
+<div class="nav-item active">
 
 🤖
 <br>
@@ -686,8 +505,7 @@ AI
 <div
 class="nav-item"
 onclick="
-window.location.href=
-'/cabinet.html'
+window.location.href='/cabinet.html'
 "
 >
 
@@ -697,72 +515,22 @@ Kabinet
 
 </div>
 
+<div
+class="nav-item"
+onclick="
+window.location.href='/admin.html'
+"
+>
+
+📊
+<br>
+Admin
+
+</div>
+
 </div>
 
 <script>
-
-async function yuborish(){
-
-const ism =
-document.getElementById('ism').value;
-
-const tur =
-document.getElementById('tur').value;
-
-const file =
-document.getElementById('file').files[0];
-
-const formData =
-new FormData();
-
-formData.append(
-'ism',
-ism
-);
-
-formData.append(
-'tur',
-tur
-);
-
-formData.append(
-'file',
-file
-);
-
-const user =
-localStorage.getItem(
-'user'
-);
-
-formData.append(
-'user',
-user
-);
-
-const res =
-await fetch('/upload',{
-
-method:'POST',
-
-body:formData
-
-});
-
-const data =
-await res.json();
-
-alert(
-data.message
-);
-
-const count =
-document.getElementById('count');
-
-count.innerHTML =
-Number(count.innerHTML) + 1;
-
-}
 
 function aiJavob(){
 
@@ -776,6 +544,11 @@ document.getElementById(
 'aiResult'
 );
 
+result.innerHTML =
+'<span class="typing">🤖 AI fikrlamoqda...</span>';
+
+setTimeout(()=>{
+
 let javob = '';
 
 if(
@@ -783,7 +556,7 @@ savol.includes('nafaqa')
 ){
 
 javob =
-'🤖 Nafaqa olish uchun pasport, oilaviy daromad va yashash joyi ma’lumotlari kerak bo‘ladi.';
+'🤖 Nafaqa olish uchun pasport, oilaviy daromad va yashash joyi ma’lumotlari talab qilinadi.';
 
 }
 
@@ -792,12 +565,12 @@ savol.includes('subsidiya')
 ){
 
 javob =
-'🤖 Subsidiya uchun uy-joy va oilaviy daromad ma’lumotlari talab qilinadi.';
+'🤖 Subsidiya uchun uy-joy ma’lumotlari va oilaviy daromad kerak bo‘ladi.';
 
 }
 
 else if(
-savol.includes('moddiy yordam')
+savol.includes('moddiy')
 ){
 
 javob =
@@ -810,7 +583,7 @@ savol.includes('ish')
 ){
 
 javob =
-'🤖 Ish so‘rovi uchun mutaxassisligingiz va telefon raqamingiz kerak bo‘ladi.';
+'🤖 Ish so‘rovi uchun telefon raqam va mutaxassislik kerak bo‘ladi.';
 
 }
 
@@ -826,76 +599,25 @@ javob =
 else{
 
 javob =
-'🤖 Sizning savolingiz AI tomonidan tahlil qilinmoqda va tez orada javob beriladi.';
+'🤖 Sizning savolingiz AI tomonidan tahlil qilindi. Yaqinda yanada aqlli ChatGPT tizimi ulanadi 🚀';
 
 }
 
 result.innerHTML =
 javob;
 
-}
-
-function setLang(lang){
-
-const logo =
-document.querySelector('.logo');
-
-const ariza =
-document.getElementById('arizaTitle');
-
-const stat =
-document.getElementById('statTitle');
-
-const statText =
-document.getElementById('statText');
-
-if(lang === 'uz'){
-
-logo.innerHTML =
-'🏛 Raqamli Mahalla';
-
-ariza.innerHTML =
-'📨 Ariza yuborish';
-
-stat.innerHTML =
-'📊 Statistika';
-
-statText.innerHTML =
-'Bugungi arizalar';
+},1500);
 
 }
 
-if(lang === 'ru'){
+function quick(type){
 
-logo.innerHTML =
-'🏛 Цифровая Махалля';
+document.getElementById(
+'aiInput'
+).value =
+type;
 
-ariza.innerHTML =
-'📨 Отправить заявку';
-
-stat.innerHTML =
-'📊 Статистика';
-
-statText.innerHTML =
-'Сегодняшние заявки';
-
-}
-
-if(lang === 'en'){
-
-logo.innerHTML =
-'🏛 Digital Mahalla';
-
-ariza.innerHTML =
-'📨 Submit Application';
-
-stat.innerHTML =
-'📊 Statistics';
-
-statText.innerHTML =
-'Today applications';
-
-}
+aiJavob();
 
 }
 
