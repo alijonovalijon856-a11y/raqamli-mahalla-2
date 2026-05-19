@@ -281,6 +281,26 @@ font-size:15px;
 
 }
 
+.pdf{
+
+background:#2563eb;
+
+border:none;
+
+padding:14px 20px;
+
+border-radius:15px;
+
+color:white;
+
+cursor:pointer;
+
+font-size:16px;
+
+margin-top:20px;
+
+}
+
 canvas{
 
 margin-top:20px;
@@ -404,6 +424,15 @@ onclick="logout()"
 
 <canvas id="myChart"></canvas>
 
+<button
+class="pdf"
+onclick="downloadPDF()"
+>
+
+📄 PDF Export
+
+</button>
+
 </div>
 
 <div class="chart-box">
@@ -464,6 +493,8 @@ fetch('/arizalar')
 .then(res=>res.json())
 
 .then(data=>{
+
+window.allData = data;
 
 document.getElementById(
 'jami'
@@ -684,6 +715,51 @@ item.style.display =
 }
 
 });
+
+}
+
+function downloadPDF(){
+
+let text =
+'RAQAMLI MAHALLA HISOBOT\n\n';
+
+window.allData.forEach(item=>{
+
+text +=
+'ISM: ' + item.ism + '\n';
+
+text +=
+'TUR: ' + item.tur + '\n';
+
+text +=
+'STATUS: ' + item.status + '\n';
+
+text +=
+'USER: ' + item.user + '\n';
+
+text +=
+'----------------------\n';
+
+});
+
+const blob =
+new Blob(
+[text],
+{
+type:'application/pdf'
+}
+);
+
+const link =
+document.createElement('a');
+
+link.href =
+URL.createObjectURL(blob);
+
+link.download =
+'raqamli-mahalla-report.pdf';
+
+link.click();
 
 }
 
