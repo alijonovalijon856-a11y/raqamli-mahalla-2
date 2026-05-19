@@ -11,6 +11,12 @@ const app = express();
 const SECRET_KEY =
 'raqamli_mahalla_secret_key_2026';
 
+const TELEGRAM_TOKEN =
+'PASTE_YOUR_NEW_TOKEN_HERE';
+
+const CHAT_ID =
+'PASTE_YOUR_CHAT_ID_HERE';
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
@@ -183,6 +189,45 @@ message:'Token xato'
 
 }
 
+async function sendTelegramMessage(text){
+
+try{
+
+await fetch(
+
+`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,
+
+{
+
+method:'POST',
+
+headers:{
+'Content-Type':
+'application/json'
+},
+
+body:JSON.stringify({
+
+chat_id:CHAT_ID,
+
+text
+
+})
+
+}
+
+);
+
+}catch(err){
+
+console.log(
+'Telegram error'
+);
+
+}
+
+}
+
 app.post(
 '/register',
 async(req,res)=>{
@@ -340,6 +385,18 @@ status:'Jarayonda'
 
 await ariza.save();
 
+await sendTelegramMessage(
+
+`🆕 Yangi ariza!
+
+👤 ${req.body.ism}
+
+📌 ${req.body.tur}
+
+🧑 ${req.body.user}`
+
+);
+
 res.json({
 
 message:'Ariza yuborildi'
@@ -387,6 +444,12 @@ status:'Tasdiqlandi'
 
 );
 
+await sendTelegramMessage(
+
+'✅ Ariza tasdiqlandi'
+
+);
+
 res.json({
 
 message:'Tasdiqlandi'
@@ -401,6 +464,12 @@ async(req,res)=>{
 
 await Ariza.findByIdAndDelete(
 req.params.id
+);
+
+await sendTelegramMessage(
+
+'🗑 Ariza o‘chirildi'
+
 );
 
 res.json({
@@ -460,15 +529,6 @@ reply =
 
 }
 
-else if(
-text.includes('salom')
-){
-
-reply =
-'Assalomu alaykum 😊 Sizga qanday yordam bera olaman?';
-
-}
-
 else{
 
 reply =
@@ -479,19 +539,6 @@ reply =
 res.json({
 
 reply
-
-});
-
-});
-
-app.get(
-'/api/protected',
-verifyToken,
-(req,res)=>{
-
-res.json({
-
-message:'Himoyalangan route'
 
 });
 
