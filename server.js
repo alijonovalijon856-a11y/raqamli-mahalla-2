@@ -16,9 +16,7 @@ const SECRET =
 'raqamliMahallaSecret';
 
 mongoose.connect(
-
-'mongodb+srv://admin:admin12345@cluster0.87jmenr.mongodb.net/raqamliMahalla?retryWrites=true&w=majority&appName=Cluster0'
-
+'mongodb+srv://admin:admin12345@cluster0.87jmenr.mongodb.net/raqamliMahalla?retryWrites=true&w=majority'
 )
 
 .then(()=>{
