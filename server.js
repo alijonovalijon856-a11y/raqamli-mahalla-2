@@ -411,6 +411,79 @@ message:'O‘chirildi'
 
 });
 
+app.post(
+'/api/ai',
+async(req,res)=>{
+
+const {
+message
+} = req.body;
+
+let reply = '';
+
+const text =
+message.toLowerCase();
+
+if(
+text.includes('nafaqa')
+){
+
+reply =
+'Nafaqa olish uchun pasport, oilaviy daromad va yashash joyi ma’lumotlari kerak bo‘ladi.';
+
+}
+
+else if(
+text.includes('subsidiya')
+){
+
+reply =
+'Subsidiya uchun uy-joy va oilaviy daromad ma’lumotlari talab qilinadi.';
+
+}
+
+else if(
+text.includes('moddiy')
+){
+
+reply =
+'Moddiy yordam mahalla komissiyasi tomonidan ko‘rib chiqiladi.';
+
+}
+
+else if(
+text.includes('ish')
+){
+
+reply =
+'Ish so‘rovi uchun telefon raqam va mutaxassislik kerak bo‘ladi.';
+
+}
+
+else if(
+text.includes('salom')
+){
+
+reply =
+'Assalomu alaykum 😊 Sizga qanday yordam bera olaman?';
+
+}
+
+else{
+
+reply =
+'Sizning savolingiz AI tomonidan tahlil qilinmoqda 🚀';
+
+}
+
+res.json({
+
+reply
+
+});
+
+});
+
 app.get(
 '/api/protected',
 verifyToken,
