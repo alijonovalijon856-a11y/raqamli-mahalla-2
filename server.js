@@ -17,7 +17,7 @@ const SECRET =
 
 mongoose.connect(
 
-'mongodb+srv://admin:admin123@cluster0.mongodb.net/raqamliMahalla'
+'mongodb+srv://admin:admin12345@cluster0.87jmenr.mongodb.net/raqamliMahalla?retryWrites=true&w=majority&appName=Cluster0'
 
 )
 
