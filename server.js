@@ -263,6 +263,10 @@ message:
 
 }
 
+console.log(password);
+
+console.log(user.password);
+
 const isMatch =
 await bcrypt.compare(
 
