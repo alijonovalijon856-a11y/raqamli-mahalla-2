@@ -71,6 +71,10 @@ border:
 
 margin-bottom:30px;
 
+flex-wrap:wrap;
+
+gap:20px;
+
 }
 
 .logo{
@@ -340,6 +344,39 @@ font-size:14px;
 
 }
 
+.ai-result{
+
+margin-top:15px;
+
+padding:15px;
+
+border-radius:16px;
+
+background:
+rgba(255,255,255,0.08);
+
+line-height:1.8;
+
+min-height:80px;
+
+}
+
+@media(max-width:700px){
+
+.logo{
+
+font-size:26px;
+
+}
+
+body{
+
+padding:15px;
+
+}
+
+}
+
 </style>
 
 </head>
@@ -489,12 +526,11 @@ AI Savol Yuborish
 </button>
 
 <div
+class="ai-result"
 id="aiResult"
-style="
-margin-top:15px;
-line-height:1.7;
-"
 >
+
+🤖 AI sizning savolingizni kutmoqda...
 
 </div>
 
@@ -579,6 +615,16 @@ formData.append(
 file
 );
 
+const user =
+localStorage.getItem(
+'user'
+);
+
+formData.append(
+'user',
+user
+);
+
 const res =
 await fetch('/upload',{
 
@@ -606,16 +652,71 @@ Number(count.innerHTML) + 1;
 function aiJavob(){
 
 const savol =
-document.getElementById('aiInput').value;
+document.getElementById(
+'aiInput'
+).value.toLowerCase();
 
 const result =
-document.getElementById('aiResult');
+document.getElementById(
+'aiResult'
+);
+
+let javob = '';
+
+if(
+savol.includes('nafaqa')
+){
+
+javob =
+'🤖 Nafaqa olish uchun pasport, oilaviy daromad va yashash joyi ma’lumotlari kerak bo‘ladi.';
+
+}
+
+else if(
+savol.includes('subsidiya')
+){
+
+javob =
+'🤖 Subsidiya uchun uy-joy va oilaviy daromad ma’lumotlari talab qilinadi.';
+
+}
+
+else if(
+savol.includes('moddiy yordam')
+){
+
+javob =
+'🤖 Moddiy yordam mahalla komissiyasi tomonidan ko‘rib chiqiladi.';
+
+}
+
+else if(
+savol.includes('ish')
+){
+
+javob =
+'🤖 Ish so‘rovi uchun mutaxassisligingiz va telefon raqamingiz kerak bo‘ladi.';
+
+}
+
+else if(
+savol.includes('salom')
+){
+
+javob =
+'🤖 Assalomu alaykum 😊 Sizga qanday yordam bera olaman?';
+
+}
+
+else{
+
+javob =
+'🤖 Sizning savolingiz AI tomonidan tahlil qilinmoqda va tez orada javob beriladi.';
+
+}
 
 result.innerHTML =
-
-'🤖 AI javobi:<br><br>' +
-
-'“' + savol + '” bo‘yicha arizangiz ko‘rib chiqiladi.';
+javob;
 
 }
 
