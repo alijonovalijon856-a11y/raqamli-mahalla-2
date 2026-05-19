@@ -4,7 +4,29 @@ const path = require('path');
 
 const multer = require('multer');
 
+const mongoose = require('mongoose');
+
 const app = express();
+
+mongoose.connect(
+
+'mongodb+srv://admin:admin123@cluster0.mongodb.net/raqamliMahalla'
+
+)
+
+.then(()=>{
+
+console.log(
+'MongoDB ulandi'
+);
+
+})
+
+.catch((err)=>{
+
+console.log(err);
+
+});
 
 app.use(express.json());
 
@@ -52,6 +74,31 @@ multer({
 storage:storage
 });
 
+const arizaSchema =
+new mongoose.Schema({
+
+ism:String,
+
+tur:String,
+
+file:String,
+
+createdAt:{
+
+type:Date,
+
+default:Date.now
+
+}
+
+});
+
+const Ariza =
+mongoose.model(
+'Ariza',
+arizaSchema
+);
+
 app.get('/',(req,res)=>{
 
 res.sendFile(
@@ -67,27 +114,56 @@ __dirname,
 app.post(
 '/upload',
 upload.single('file'),
-(req,res)=>{
+async (req,res)=>{
 
-if(!req.file){
+try{
 
-return res.json({
+const yangiAriza =
+new Ariza({
+
+ism:req.body.ism,
+
+tur:req.body.tur,
+
+file:req.file
+? req.file.filename
+: ''
+
+});
+
+await yangiAriza.save();
+
+res.json({
 
 message:
-'File tanlanmagan'
+'Ariza muvaffaqiyatli yuborildi'
+
+});
+
+}catch(err){
+
+console.log(err);
+
+res.json({
+
+message:
+'Xatolik yuz berdi'
 
 });
 
 }
 
-res.json({
-
-message:
-'File muvaffaqiyatli yuklandi',
-
-file:req.file.filename
-
 });
+
+app.get(
+'/arizalar',
+async (req,res)=>{
+
+const arizalar =
+await Ariza.find()
+.sort({ createdAt:-1 });
+
+res.json(arizalar);
 
 });
 
