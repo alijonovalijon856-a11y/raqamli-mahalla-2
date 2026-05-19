@@ -1,22 +1,42 @@
 const express = require('express');
-
-const path = require('path');
-
-const multer = require('multer');
-
 const mongoose = require('mongoose');
-
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const bcrypt = require('bcrypt');
-
 const jwt = require('jsonwebtoken');
 
 const app = express();
 
-const SECRET =
-'raqamliMahallaSecret';
+const SECRET_KEY =
+'raqamli_mahalla_secret_key_2026';
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
+app.use(express.static('public'));
+
+app.use(
+'/uploads',
+express.static(
+path.join(__dirname,'uploads')
+)
+);
+
+if(
+!fs.existsSync(
+path.join(__dirname,'uploads')
+)
+){
+
+fs.mkdirSync(
+path.join(__dirname,'uploads')
+);
+
+}
 
 mongoose.connect(
-'mongodb+srv://admin:admin12345@cluster0.87jmenr.mongodb.net/raqamliMahalla?retryWrites=true&w=majority'
+'mongodb+srv://admin12345:admin12345@cluster0.mongodb.net/raqamliMahalla?retryWrites=true&w=majority'
 )
 
 .then(()=>{
@@ -27,69 +47,10 @@ console.log(
 
 })
 
-.catch((err)=>{
+.catch(err=>{
 
 console.log(err);
 
-});
-
-app.use(express.json());
-
-app.use(
-express.urlencoded({
-extended:true
-})
-);
-
-app.use(
-express.static(
-path.join(
-__dirname,
-'public'
-)
-)
-);
-
-app.use(
-'/uploads',
-express.static(
-path.join(
-__dirname,
-'uploads'
-)
-)
-);
-
-const storage =
-multer.diskStorage({
-
-destination:
-function(req,file,cb){
-
-cb(
-null,
-'uploads/'
-);
-
-},
-
-filename:
-function(req,file,cb){
-
-cb(
-null,
-Date.now() +
-'-' +
-file.originalname
-);
-
-}
-
-});
-
-const upload =
-multer({
-storage:storage
 });
 
 const userSchema =
@@ -97,20 +58,9 @@ new mongoose.Schema({
 
 username:String,
 
-password:String,
-
-role:{
-type:String,
-default:'user'
-}
+password:String
 
 });
-
-const User =
-mongoose.model(
-'User',
-userSchema
-);
 
 const arizaSchema =
 new mongoose.Schema({
@@ -135,143 +85,185 @@ default:Date.now
 
 });
 
+const User =
+mongoose.model(
+'User',
+userSchema
+);
+
 const Ariza =
 mongoose.model(
 'Ariza',
 arizaSchema
 );
 
-app.get('/',(req,res)=>{
+const storage =
+multer.diskStorage({
 
-res.sendFile(
-path.join(
-__dirname,
-'public',
-'index.html'
+destination:function(
+req,
+file,
+cb
+){
+
+cb(
+null,
+'uploads/'
+);
+
+},
+
+filename:function(
+req,
+file,
+cb
+){
+
+cb(
+null,
+Date.now() +
+path.extname(
+file.originalname
 )
 );
 
+}
+
 });
 
-app.get(
-'/login.html',
-(req,res)=>{
+const upload =
+multer({
+storage
+});
 
-res.sendFile(
-path.join(
-__dirname,
-'public',
-'login.html'
-)
+function verifyToken(
+req,
+res,
+next
+){
+
+const auth =
+req.headers.authorization;
+
+if(!auth){
+
+return res.status(401).json({
+
+message:'Token yoq'
+
+});
+
+}
+
+const token =
+auth.split(' ')[1];
+
+try{
+
+const decoded =
+jwt.verify(
+token,
+SECRET_KEY
 );
 
-});
+req.user =
+decoded;
 
-app.get(
-'/admin.html',
-(req,res)=>{
+next();
 
-res.sendFile(
-path.join(
-__dirname,
-'public',
-'admin.html'
-)
-);
+}catch(err){
+
+return res.status(403).json({
+
+message:'Token xato'
 
 });
 
-app.get(
-'/cabinet.html',
-(req,res)=>{
+}
 
-res.sendFile(
-path.join(
-__dirname,
-'public',
-'cabinet.html'
-)
-);
-
-});
+}
 
 app.post(
 '/register',
-async (req,res)=>{
-
-try{
+async(req,res)=>{
 
 const {
 username,
 password
 } = req.body;
 
-const oldUser =
+const existing =
 await User.findOne({
 username
 });
 
-if(oldUser){
+if(existing){
 
 return res.json({
 
-message:
-'User mavjud'
+message:'User mavjud'
 
 });
 
 }
 
-const hashedPassword =
+const hashed =
 await bcrypt.hash(
 password,
 10
 );
 
-const newUser =
+const user =
 new User({
 
 username,
 
-password:
-hashedPassword
+password:hashed
 
 });
 
-await newUser.save();
+await user.save();
 
 res.json({
 
-message:
-'Register muvaffaqiyatli'
+message:'Ro‘yxatdan o‘tdi'
 
 });
-
-}catch(err){
-
-console.log(err);
-
-res.json({
-
-message:
-'Xatolik'
-
-});
-
-}
 
 });
 
 app.post(
 '/login',
-async (req,res)=>{
-
-try{
+async(req,res)=>{
 
 const {
 username,
 password
 } = req.body;
+
+if(
+username === 'admin'
+&&
+password === 'admin123'
+){
+
+const token =
+jwt.sign(
+{
+role:'admin'
+},
+SECRET_KEY
+);
+
+return res.json({
+
+message:'Admin',
+
+token
+
+});
+
+}
 
 const user =
 await User.findOne({
@@ -282,28 +274,23 @@ if(!user){
 
 return res.json({
 
-message:
-'User topilmadi'
+message:'User topilmadi'
 
 });
 
 }
 
-const isMatch =
+const match =
 await bcrypt.compare(
-
 password,
-
 user.password
-
 );
 
-if(!isMatch){
+if(!match){
 
 return res.json({
 
-message:
-'Parol noto‘g‘ri'
+message:'Parol xato'
 
 });
 
@@ -311,83 +298,51 @@ message:
 
 const token =
 jwt.sign(
-
 {
-
-id:user._id,
-
-username:user.username,
-
-role:user.role
-
+username:user.username
 },
-
-SECRET,
-
-{
-
-expiresIn:'7d'
-
-}
-
+SECRET_KEY
 );
 
 res.json({
 
-message:
-'Login muvaffaqiyatli',
+message:'Success',
 
 token,
 
-role:user.role
+user:user.username
 
 });
-
-}catch(err){
-
-console.log(err);
-
-res.json({
-
-message:
-'Xatolik'
-
-});
-
-}
 
 });
 
 app.post(
 '/upload',
 upload.single('file'),
-async (req,res)=>{
+async(req,res)=>{
 
 try{
 
-const yangiAriza =
+const ariza =
 new Ariza({
 
 ism:req.body.ism,
 
 tur:req.body.tur,
 
-user:req.body.user,
+file:req.file.filename,
 
-file:req.file
-? req.file.filename
-: '',
+user:req.body.user,
 
 status:'Jarayonda'
 
 });
 
-await yangiAriza.save();
+await ariza.save();
 
 res.json({
 
-message:
-'Ariza muvaffaqiyatli yuborildi'
+message:'Ariza yuborildi'
 
 });
 
@@ -397,8 +352,7 @@ console.log(err);
 
 res.json({
 
-message:
-'Xatolik yuz berdi'
+message:'Xatolik'
 
 });
 
@@ -408,89 +362,65 @@ message:
 
 app.get(
 '/arizalar',
-async (req,res)=>{
+async(req,res)=>{
 
-const arizalar =
-await Ariza.find()
-.sort({
+const data =
+await Ariza.find().sort({
 createdAt:-1
 });
 
-res.json(arizalar);
+res.json(data);
 
 });
 
 app.put(
 '/api/ariza/:id',
-async (req,res)=>{
-
-try{
+async(req,res)=>{
 
 await Ariza.findByIdAndUpdate(
 
 req.params.id,
 
 {
-
 status:'Tasdiqlandi'
-
 }
 
 );
 
 res.json({
 
-message:
-'Tasdiqlandi'
+message:'Tasdiqlandi'
 
 });
-
-}catch(err){
-
-console.log(err);
-
-res.json({
-
-message:
-'Xatolik'
-
-});
-
-}
 
 });
 
 app.delete(
 '/api/ariza/:id',
-async (req,res)=>{
-
-try{
+async(req,res)=>{
 
 await Ariza.findByIdAndDelete(
-
 req.params.id
-
 );
 
 res.json({
 
-message:
-'O‘chirildi'
+message:'O‘chirildi'
 
 });
 
-}catch(err){
+});
 
-console.log(err);
+app.get(
+'/api/protected',
+verifyToken,
+(req,res)=>{
 
 res.json({
 
-message:
-'Xatolik'
+message:'Himoyalangan route'
 
 });
-
-}
 
 });
 
@@ -500,7 +430,7 @@ process.env.PORT || 3000;
 app.listen(PORT,()=>{
 
 console.log(
-'SERVER ISHLADI'
+'Server ishladi ' + PORT
 );
 
 });
