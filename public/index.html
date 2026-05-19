@@ -1,79 +1,452 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
+
+<title>Raqamli Mahalla</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+
+background:
+linear-gradient(
+135deg,
+#0f172a,
+#1e293b,
+#0f172a
+);
+
+min-height:100vh;
+
+padding:30px;
+
+color:white;
+
+}
+
+.container{
+
+max-width:1200px;
+
+margin:auto;
+
+}
+
+.header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:30px;
+
+padding:20px;
+
+border-radius:20px;
+
+background:
+rgba(255,255,255,0.08);
+
+backdrop-filter:blur(10px);
+
+border:
+1px solid rgba(255,255,255,0.1);
+
+}
+
+.logo{
+
+font-size:32px;
+
+font-weight:bold;
+
+}
+
+.langs{
+
+display:flex;
+
+gap:10px;
+
+}
+
+.lang{
+
+padding:10px 14px;
+
+border-radius:10px;
+
+background:
+rgba(255,255,255,0.1);
+
+cursor:pointer;
+
+}
+
+.grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(320px,1fr));
+
+gap:25px;
+
+}
+
+.card{
+
+background:
+rgba(255,255,255,0.08);
+
+border:
+1px solid rgba(255,255,255,0.1);
+
+backdrop-filter:blur(15px);
+
+padding:25px;
+
+border-radius:25px;
+
+box-shadow:
+0 10px 40px rgba(0,0,0,0.3);
+
+transition:0.3s;
+
+}
+
+.card:hover{
+
+transform:
+translateY(-5px);
+
+}
+
+h2{
+
+margin-bottom:20px;
+
+font-size:24px;
+
+}
+
+input,
+select,
+textarea{
+
+width:100%;
+
+padding:14px;
+
+margin-top:10px;
+
+border:none;
+
+outline:none;
+
+border-radius:12px;
+
+background:
+rgba(255,255,255,0.1);
+
+color:white;
+
+font-size:16px;
+
+}
+
+input::placeholder,
+textarea::placeholder{
+
+color:#ddd;
+
+}
+
+button{
+
+width:100%;
+
+padding:15px;
+
+margin-top:15px;
+
+border:none;
+
+border-radius:14px;
+
+font-size:16px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+background:
+linear-gradient(
+90deg,
+#2563eb,
+#7c3aed
+);
+
+color:white;
+
+transition:0.3s;
+
+}
+
+button:hover{
+
+opacity:0.9;
+
+transform:scale(1.02);
+
+}
+
+.stat{
+
+font-size:42px;
+
+font-weight:bold;
+
+margin-top:15px;
+
+color:#38bdf8;
+
+}
+
+.ai-box{
+
+height:120px;
+
+resize:none;
+
+}
+
+.footer{
+
+margin-top:40px;
+
+text-align:center;
+
+opacity:0.7;
+
+}
+
+.file-box{
+
+margin-top:15px;
+
+padding:15px;
+
+border-radius:15px;
+
+background:
+rgba(255,255,255,0.08);
+
+border:
+2px dashed rgba(255,255,255,0.3);
+
+text-align:center;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<div class="logo">
+
+🏛 Raqamli Mahalla
+
+</div>
+
+<div class="langs">
+
+<div class="lang">🇺🇿 UZ</div>
+
+<div class="lang">🇷🇺 RU</div>
+
+<div class="lang">🇬🇧 EN</div>
+
+</div>
+
+</div>
+
+<div class="grid">
+
 <div class="card">
 
-<h2>Ariza yuborish</h2>
+<h2>📨 Ariza yuborish</h2>
 
 <input
 type="text"
 id="ism"
 placeholder="Ismingiz"
-style="
-width:100%;
-padding:10px;
-"
->
+/>
 
-<br><br>
-
-<select
-id="tur"
-style="
-width:100%;
-padding:10px;
-"
->
+<select id="tur">
 
 <option>Nafaqa</option>
+
 <option>Yordam</option>
+
 <option>Subsidiya</option>
 
 </select>
 
-<br><br>
+<div class="file-box">
 
-<div
-style="
-background:#2563eb;
-color:white;
-padding:14px;
-border-radius:10px;
-text-align:center;
-font-weight:bold;
-"
->
-
-📎 Fayl tanlash pastda
-
-</div>
-
-<br>
+📎 Hujjat yuklash
 
 <input
 type="file"
 id="file"
-style="
-display:block !important;
-opacity:1 !important;
-visibility:visible !important;
-width:100%;
-background:white;
-padding:10px;
-border:2px solid black;
-"
->
+/>
 
-<br><br>
+</div>
 
-<button
-class="send"
-onclick="yuborish()"
-style="
-width:100%;
-padding:12px;
-"
->
+<button onclick="yuborish()">
 
 Yuborish
 
 </button>
 
 </div>
+
+<div class="card">
+
+<h2>📊 Statistika</h2>
+
+<div class="stat">
+
+128
+
+</div>
+
+<p>
+
+Bugungi arizalar
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>🤖 AI Assistant</h2>
+
+<textarea
+class="ai-box"
+placeholder="AI ga savol yozing"
+></textarea>
+
+<button>
+
+AI Savol Yuborish
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>💬 Live Chat</h2>
+
+<textarea
+placeholder="Xabar yozing"
+></textarea>
+
+<button>
+
+Xabar yuborish
+
+</button>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+© 2026 Raqamli Mahalla
+
+</div>
+
+</div>
+
+<script>
+
+async function yuborish(){
+
+const ism =
+document.getElementById('ism').value;
+
+const tur =
+document.getElementById('tur').value;
+
+const file =
+document.getElementById('file').files[0];
+
+const formData =
+new FormData();
+
+formData.append(
+'ism',
+ism
+);
+
+formData.append(
+'tur',
+tur
+);
+
+formData.append(
+'file',
+file
+);
+
+const res =
+await fetch('/upload',{
+
+method:'POST',
+
+body:formData
+
+});
+
+const data =
+await res.json();
+
+alert(
+data.message
+);
+
+}
+
+</script>
+
+</body>
+
+</html>
