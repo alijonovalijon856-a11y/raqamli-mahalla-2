@@ -429,7 +429,7 @@ class="pdf"
 onclick="downloadPDF()"
 >
 
-📄 PDF Export
+📄 Report Yuklash
 
 </button>
 
@@ -746,7 +746,7 @@ const blob =
 new Blob(
 [text],
 {
-type:'application/pdf'
+type:'text/plain'
 }
 );
 
@@ -757,9 +757,13 @@ link.href =
 URL.createObjectURL(blob);
 
 link.download =
-'raqamli-mahalla-report.pdf';
+'raqamli-mahalla-report.txt';
+
+document.body.appendChild(link);
 
 link.click();
+
+document.body.removeChild(link);
 
 }
 
