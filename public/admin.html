@@ -1,20 +1,223 @@
-<script>
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-const token =
-localStorage.getItem('adminToken');
+<title>Raqamli Mahalla Admin</title>
 
-function loadArizalar(){
+<style>
 
-fetch('/api/all',{
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
 
-headers:{
+body{
+background:
+linear-gradient(
+135deg,
+#0f172a,
+#1e293b,
+#334155
+);
+min-height:100vh;
+padding:20px;
+color:white;
+}
 
-Authorization:
-'Bearer ' + token
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+flex-wrap:wrap;
+gap:15px;
+}
+
+.logo{
+font-size:35px;
+font-weight:bold;
+}
+
+.logout{
+background:red;
+border:none;
+padding:12px 20px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+font-size:16px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:30px;
+}
+
+.card{
+background:
+rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+padding:25px;
+border-radius:20px;
+box-shadow:
+0 8px 32px rgba(0,0,0,0.3);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h2{
+font-size:40px;
+margin-bottom:10px;
+}
+
+.card p{
+font-size:18px;
+opacity:0.8;
+}
+
+.list{
+display:grid;
+gap:20px;
+}
+
+.item{
+background:
+rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+padding:20px;
+border-radius:20px;
+box-shadow:
+0 8px 32px rgba(0,0,0,0.3);
+}
+
+.item b{
+font-size:22px;
+}
+
+.item a{
+display:inline-block;
+margin-top:10px;
+color:#38bdf8;
+text-decoration:none;
+font-weight:bold;
+}
+
+.buttons{
+margin-top:15px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.approve{
+background:#16a34a;
+border:none;
+padding:12px 18px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+font-size:15px;
+}
+
+.delete{
+background:#dc2626;
+border:none;
+padding:12px 18px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+font-size:15px;
+}
+
+.pending{
+background:#f59e0b;
+border:none;
+padding:12px 18px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+font-size:15px;
+}
+
+@media(max-width:700px){
+
+.logo{
+font-size:25px;
+}
+
+.card h2{
+font-size:30px;
+}
 
 }
 
-})
+</style>
+</head>
+
+<body>
+
+<div class="top">
+
+<div class="logo">
+🏛 Raqamli Mahalla Admin
+</div>
+
+<button
+class="logout"
+onclick="logout()"
+>
+🚪 Chiqish
+</button>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+<h2 id="jami">0</h2>
+<p>📨 Jami arizalar</p>
+</div>
+
+<div class="card">
+<h2 id="tasdiq">0</h2>
+<p>✅ Tasdiqlangan</p>
+</div>
+
+<div class="card">
+<h2 id="pending">0</h2>
+<p>⏳ Jarayonda</p>
+</div>
+
+</div>
+
+<div
+class="list"
+id="royxat"
+>
+
+</div>
+
+<script>
+
+const token =
+localStorage.getItem(
+'adminToken'
+);
+
+function loadArizalar(){
+
+fetch('/arizalar')
+
 .then(res=>res.json())
 
 .then(data=>{
@@ -27,14 +230,14 @@ document.getElementById(
 'tasdiq'
 ).innerText =
 data.filter(
-a=>a.status==='approved'
+a=>a.status==='Tasdiqlandi'
 ).length;
 
 document.getElementById(
 'pending'
 ).innerText =
 data.filter(
-a=>a.status==='pending'
+a=>a.status==='Jarayonda'
 ).length;
 
 let html='';
@@ -45,18 +248,27 @@ html += `
 
 <div class="item">
 
-<b>${item.ism}</b><br>
+<b>👤 ${item.ism}</b>
 
-Tur: ${item.tur}<br>
+<br><br>
 
-Status: ${item.status}<br>
+📌 Tur:
+${item.tur}
 
-User: ${item.user}
+<br><br>
+
+📊 Status:
+${item.status}
+
+<br><br>
+
+🧑 User:
+${item.user}
 
 <br><br>
 
 <a
-href="/uploads/${item.hujjat}"
+href="/uploads/${item.file}"
 target="_blank"
 >
 
@@ -64,9 +276,10 @@ target="_blank"
 
 </a>
 
-<br><br>
+<div class="buttons">
 
 <button
+class="approve"
 onclick="tasdiqlash(
 '${item._id}'
 )"
@@ -77,14 +290,28 @@ onclick="tasdiqlash(
 </button>
 
 <button
+class="pending"
+onclick="jarayon(
+'${item._id}'
+)"
+>
+
+⏳ Jarayonda
+
+</button>
+
+<button
+class="delete"
 onclick="ochirish(
 '${item._id}'
 )"
 >
 
-🗑 O'chirish
+🗑 O‘chirish
 
 </button>
+
+</div>
 
 </div>
 
@@ -104,25 +331,28 @@ function tasdiqlash(id){
 
 fetch('/api/ariza/' + id,{
 
-method:'PUT',
-
-headers:{
-
-Authorization:
-'Bearer ' + token
-
-}
+method:'PUT'
 
 })
 .then(res=>res.json())
 
 .then(data=>{
 
-alert(data.message);
+alert(
+'Tasdiqlandi'
+);
 
 loadArizalar();
 
 });
+
+}
+
+function jarayon(id){
+
+alert(
+'Jarayonda belgilandi'
+);
 
 }
 
@@ -130,21 +360,16 @@ function ochirish(id){
 
 fetch('/api/ariza/' + id,{
 
-method:'DELETE',
-
-headers:{
-
-Authorization:
-'Bearer ' + token
-
-}
+method:'DELETE'
 
 })
 .then(res=>res.json())
 
 .then(data=>{
 
-alert(data.message);
+alert(
+'O‘chirildi'
+);
 
 loadArizalar();
 
@@ -152,6 +377,20 @@ loadArizalar();
 
 }
 
+function logout(){
+
+localStorage.removeItem(
+'adminToken'
+);
+
+window.location.href =
+'/login.html';
+
+}
+
 loadArizalar();
 
 </script>
+
+</body>
+</html>
