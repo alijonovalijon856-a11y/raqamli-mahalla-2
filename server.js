@@ -35,18 +35,28 @@ console.log(err);
 
 app.use(express.json());
 
-app.use(express.urlencoded({ extended:true }));
+app.use(
+express.urlencoded({
+extended:true
+})
+);
 
 app.use(
 express.static(
-path.join(__dirname,'public')
+path.join(
+__dirname,
+'public'
+)
 )
 );
 
 app.use(
 '/uploads',
 express.static(
-path.join(__dirname,'uploads')
+path.join(
+__dirname,
+'uploads'
+)
 )
 );
 
@@ -56,7 +66,10 @@ multer.diskStorage({
 destination:
 function(req,file,cb){
 
-cb(null,'uploads/');
+cb(
+null,
+'uploads/'
+);
 
 },
 
@@ -87,11 +100,8 @@ username:String,
 password:String,
 
 role:{
-
 type:String,
-
 default:'user'
-
 }
 
 });
@@ -114,19 +124,13 @@ file:String,
 user:String,
 
 status:{
-
 type:String,
-
 default:'Jarayonda'
-
 },
 
 createdAt:{
-
 type:Date,
-
 default:Date.now
-
 }
 
 });
@@ -140,13 +144,11 @@ arizaSchema
 app.get('/',(req,res)=>{
 
 res.sendFile(
-
 path.join(
 __dirname,
 'public',
 'index.html'
 )
-
 );
 
 });
@@ -156,13 +158,39 @@ app.get(
 (req,res)=>{
 
 res.sendFile(
-
 path.join(
 __dirname,
 'public',
 'login.html'
 )
+);
 
+});
+
+app.get(
+'/admin.html',
+(req,res)=>{
+
+res.sendFile(
+path.join(
+__dirname,
+'public',
+'admin.html'
+)
+);
+
+});
+
+app.get(
+'/cabinet.html',
+(req,res)=>{
+
+res.sendFile(
+path.join(
+__dirname,
+'public',
+'cabinet.html'
+)
 );
 
 });
@@ -173,14 +201,14 @@ async (req,res)=>{
 
 try{
 
-const { username,password } =
-req.body;
+const {
+username,
+password
+} = req.body;
 
 const oldUser =
 await User.findOne({
-
 username
-
 });
 
 if(oldUser){
@@ -240,14 +268,14 @@ async (req,res)=>{
 
 try{
 
-const { username,password } =
-req.body;
+const {
+username,
+password
+} = req.body;
 
 const user =
 await User.findOne({
-
 username
-
 });
 
 if(!user){
@@ -260,10 +288,6 @@ message:
 });
 
 }
-
-console.log(password);
-
-console.log(user.password);
 
 const isMatch =
 await bcrypt.compare(
@@ -352,7 +376,9 @@ user:req.body.user,
 
 file:req.file
 ? req.file.filename
-: ''
+: '',
+
+status:'Jarayonda'
 
 });
 
@@ -386,9 +412,85 @@ async (req,res)=>{
 
 const arizalar =
 await Ariza.find()
-.sort({ createdAt:-1 });
+.sort({
+createdAt:-1
+});
 
 res.json(arizalar);
+
+});
+
+app.put(
+'/api/ariza/:id',
+async (req,res)=>{
+
+try{
+
+await Ariza.findByIdAndUpdate(
+
+req.params.id,
+
+{
+
+status:'Tasdiqlandi'
+
+}
+
+);
+
+res.json({
+
+message:
+'Tasdiqlandi'
+
+});
+
+}catch(err){
+
+console.log(err);
+
+res.json({
+
+message:
+'Xatolik'
+
+});
+
+}
+
+});
+
+app.delete(
+'/api/ariza/:id',
+async (req,res)=>{
+
+try{
+
+await Ariza.findByIdAndDelete(
+
+req.params.id
+
+);
+
+res.json({
+
+message:
+'O‘chirildi'
+
+});
+
+}catch(err){
+
+console.log(err);
+
+res.json({
+
+message:
+'Xatolik'
+
+});
+
+}
 
 });
 
