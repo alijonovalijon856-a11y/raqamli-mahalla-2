@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="uz">
-
 <head>
 
 <meta charset="UTF-8">
@@ -8,9 +7,9 @@
 <meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
-/>
+>
 
-<title>Login</title>
+<title>Raqamli Mahalla Login</title>
 
 <style>
 
@@ -23,130 +22,156 @@ font-family:Arial;
 
 body{
 
+height:100vh;
+
 display:flex;
-
 justify-content:center;
-
 align-items:center;
-
-min-height:100vh;
 
 background:
 linear-gradient(
 135deg,
-#020617,
 #0f172a,
-#1e293b
+#1e293b,
+#334155
 );
 
-color:white;
+overflow:hidden;
 
 }
 
-.box{
+.container{
 
 width:400px;
-
-padding:35px;
-
-border-radius:30px;
+max-width:95%;
 
 background:
-rgba(255,255,255,0.07);
+rgba(255,255,255,0.1);
 
-backdrop-filter:blur(18px);
+backdrop-filter:blur(10px);
 
-border:
-1px solid rgba(255,255,255,0.1);
+padding:40px;
+
+border-radius:25px;
 
 box-shadow:
-0 10px 40px rgba(0,0,0,0.4);
+0 8px 32px rgba(0,0,0,0.3);
+
+color:white;
+
+animation:show 1s;
+
+}
+
+@keyframes show{
+
+from{
+opacity:0;
+transform:translateY(30px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
 
 }
 
 .logo{
 
-font-size:32px;
-
-font-weight:bold;
-
 text-align:center;
-
-margin-bottom:25px;
+font-size:35px;
+font-weight:bold;
+margin-bottom:30px;
 
 }
 
-input{
+.inputBox{
+
+margin-bottom:20px;
+
+}
+
+.inputBox input{
 
 width:100%;
 
 padding:15px;
 
-margin-top:15px;
-
 border:none;
 
-outline:none;
-
-border-radius:15px;
-
-background:
-rgba(255,255,255,0.08);
-
-color:white;
+border-radius:12px;
 
 font-size:16px;
 
+outline:none;
+
+background:
+rgba(255,255,255,0.2);
+
+color:white;
+
 }
 
-input::placeholder{
+.inputBox input::placeholder{
 
 color:#ddd;
 
 }
 
+.buttons{
+
+display:flex;
+gap:15px;
+margin-top:10px;
+
+}
+
 button{
 
-width:100%;
+flex:1;
 
 padding:15px;
 
-margin-top:18px;
-
 border:none;
 
-border-radius:16px;
+border-radius:12px;
 
 font-size:16px;
 
-font-weight:bold;
-
 cursor:pointer;
 
-background:
-linear-gradient(
-90deg,
-#2563eb,
-#7c3aed
-);
-
-color:white;
+font-weight:bold;
 
 transition:0.3s;
 
 }
 
+.register{
+
+background:#2563eb;
+color:white;
+
+}
+
+.login{
+
+background:#16a34a;
+color:white;
+
+}
+
 button:hover{
 
-transform:scale(1.02);
+transform:scale(1.05);
 
 }
 
 .msg{
 
-margin-top:15px;
-
+margin-top:20px;
 text-align:center;
+font-size:18px;
 
 }
 
@@ -156,7 +181,7 @@ text-align:center;
 
 <body>
 
-<div class="box">
+<div class="container">
 
 <div class="logo">
 
@@ -164,29 +189,47 @@ text-align:center;
 
 </div>
 
+<div class="inputBox">
+
 <input
 type="text"
 id="username"
 placeholder="Username"
-/>
+>
+
+</div>
+
+<div class="inputBox">
 
 <input
 type="password"
 id="password"
 placeholder="Password"
-/>
+>
 
-<button onclick="register()">
+</div>
+
+<div class="buttons">
+
+<button
+class="register"
+onclick="register()"
+>
 
 Ro‘yxatdan o‘tish
 
 </button>
 
-<button onclick="login()">
+<button
+class="login"
+onclick="login()"
+>
 
 Kirish
 
 </button>
+
+</div>
 
 <div
 class="msg"
@@ -202,27 +245,28 @@ id="msg"
 async function register(){
 
 const username =
-document.getElementById('username').value;
+document.getElementById(
+'username'
+).value;
 
 const password =
-document.getElementById('password').value;
+document.getElementById(
+'password'
+).value;
 
-const res =
+const req =
 await fetch('/register',{
 
 method:'POST',
 
 headers:{
-
 'Content-Type':
 'application/json'
-
 },
 
 body:JSON.stringify({
 
 username,
-
 password
 
 })
@@ -230,10 +274,11 @@ password
 });
 
 const data =
-await res.json();
+await req.json();
 
-document.getElementById('msg')
-.innerHTML =
+document.getElementById(
+'msg'
+).innerText =
 data.message;
 
 }
@@ -241,27 +286,28 @@ data.message;
 async function login(){
 
 const username =
-document.getElementById('username').value;
+document.getElementById(
+'username'
+).value;
 
 const password =
-document.getElementById('password').value;
+document.getElementById(
+'password'
+).value;
 
-const res =
+const req =
 await fetch('/login',{
 
 method:'POST',
 
 headers:{
-
 'Content-Type':
 'application/json'
-
 },
 
 body:JSON.stringify({
 
 username,
-
 password
 
 })
@@ -269,10 +315,11 @@ password
 });
 
 const data =
-await res.json();
+await req.json();
 
-document.getElementById('msg')
-.innerHTML =
+document.getElementById(
+'msg'
+).innerText =
 data.message;
 
 if(data.token){
@@ -287,15 +334,20 @@ localStorage.setItem(
 username
 );
 
-if(data.role === 'admin'){
+if(data.role==='admin'){
 
-window.location =
+localStorage.setItem(
+'adminToken',
+data.token
+);
+
+window.location.href =
 '/admin.html';
 
 }else{
 
-window.location =
-'/index.html';
+window.location.href =
+'/cabinet.html';
 
 }
 
@@ -306,5 +358,4 @@ window.location =
 </script>
 
 </body>
-
 </html>
