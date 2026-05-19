@@ -98,6 +98,10 @@ rgba(255,255,255,0.1);
 
 cursor:pointer;
 
+border:none;
+
+color:white;
+
 }
 
 .grid{
@@ -169,6 +173,12 @@ rgba(255,255,255,0.1);
 color:white;
 
 font-size:16px;
+
+}
+
+option{
+
+background:#0f172a;
 
 }
 
@@ -284,11 +294,32 @@ text-align:center;
 
 <div class="langs">
 
-<div class="lang">🇺🇿 UZ</div>
+<button
+class="lang"
+onclick="setLang('uz')"
+>
 
-<div class="lang">🇷🇺 RU</div>
+🇺🇿 UZ
 
-<div class="lang">🇬🇧 EN</div>
+</button>
+
+<button
+class="lang"
+onclick="setLang('ru')"
+>
+
+🇷🇺 RU
+
+</button>
+
+<button
+class="lang"
+onclick="setLang('en')"
+>
+
+🇬🇧 EN
+
+</button>
 
 </div>
 
@@ -298,7 +329,11 @@ text-align:center;
 
 <div class="card">
 
-<h2>📨 Ariza yuborish</h2>
+<h2 id="arizaTitle">
+
+📨 Ariza yuborish
+
+</h2>
 
 <input
 type="text"
@@ -310,9 +345,15 @@ placeholder="Ismingiz"
 
 <option>Nafaqa</option>
 
-<option>Yordam</option>
+<option>Moddiy yordam</option>
 
 <option>Subsidiya</option>
+
+<option>Ish so‘rovi</option>
+
+<option>Kommunal yordam</option>
+
+<option>Davolanish yordami</option>
 
 </select>
 
@@ -337,7 +378,11 @@ Yuborish
 
 <div class="card">
 
-<h2>📊 Statistika</h2>
+<h2 id="statTitle">
+
+📊 Statistika
+
+</h2>
 
 <div class="stat">
 
@@ -345,7 +390,7 @@ Yuborish
 
 </div>
 
-<p>
+<p id="statText">
 
 Bugungi arizalar
 
@@ -355,7 +400,11 @@ Bugungi arizalar
 
 <div class="card">
 
-<h2>🤖 AI Assistant</h2>
+<h2>
+
+🤖 AI Assistant
+
+</h2>
 
 <textarea
 class="ai-box"
@@ -372,7 +421,11 @@ AI Savol Yuborish
 
 <div class="card">
 
-<h2>💬 Live Chat</h2>
+<h2>
+
+💬 Live Chat
+
+</h2>
 
 <textarea
 placeholder="Xabar yozing"
@@ -442,6 +495,70 @@ await res.json();
 alert(
 data.message
 );
+
+}
+
+function setLang(lang){
+
+const logo =
+document.querySelector('.logo');
+
+const ariza =
+document.getElementById('arizaTitle');
+
+const stat =
+document.getElementById('statTitle');
+
+const statText =
+document.getElementById('statText');
+
+if(lang === 'uz'){
+
+logo.innerHTML =
+'🏛 Raqamli Mahalla';
+
+ariza.innerHTML =
+'📨 Ariza yuborish';
+
+stat.innerHTML =
+'📊 Statistika';
+
+statText.innerHTML =
+'Bugungi arizalar';
+
+}
+
+if(lang === 'ru'){
+
+logo.innerHTML =
+'🏛 Цифровая Махалля';
+
+ariza.innerHTML =
+'📨 Отправить заявку';
+
+stat.innerHTML =
+'📊 Статистика';
+
+statText.innerHTML =
+'Сегодняшние заявки';
+
+}
+
+if(lang === 'en'){
+
+logo.innerHTML =
+'🏛 Digital Mahalla';
+
+ariza.innerHTML =
+'📨 Submit Application';
+
+stat.innerHTML =
+'📊 Statistics';
+
+statText.innerHTML =
+'Today applications';
+
+}
 
 }
 
