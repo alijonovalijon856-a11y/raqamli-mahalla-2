@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Fuqaro Kabineti</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+
+background:
+linear-gradient(
+135deg,
+#0f172a,
+#1e293b,
+#334155
+);
+
+min-height:100vh;
+padding:20px;
+color:white;
+
+}
+
+.top{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+flex-wrap:wrap;
+gap:20px;
+
+}
+
+.logo{
+
+font-size:35px;
+font-weight:bold;
+
+}
+
+.logout{
+
+background:red;
+border:none;
+padding:12px 20px;
+border-radius:10px;
+color:white;
+cursor:pointer;
+font-size:16px;
+
+}
+
+.cards{
+
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+margin-bottom:30px;
+
+}
+
+.card{
+
+background:
+rgba(255,255,255,0.1);
+
+backdrop-filter:blur(10px);
+
+padding:25px;
+border-radius:20px;
+
+box-shadow:
+0 8px 32px rgba(0,0,0,0.3);
+
+}
+
+.card h2{
+
+font-size:40px;
+margin-bottom:10px;
+
+}
+
+.card p{
+
+font-size:18px;
+opacity:0.8;
+
+}
+
+.list{
+
+display:grid;
+gap:20px;
+
+}
+
+.item{
+
+background:
+rgba(255,255,255,0.1);
+
+backdrop-filter:blur(10px);
+
+padding:20px;
+border-radius:20px;
+
+box-shadow:
+0 8px 32px rgba(0,0,0,0.3);
+
+}
+
+.green{
+
+color:#22c55e;
+font-weight:bold;
+
+}
+
+.orange{
+
+color:#f59e0b;
+font-weight:bold;
+
+}
+
+.red{
+
+color:#ef4444;
+font-weight:bold;
+
+}
+
+.item a{
+
+display:inline-block;
+margin-top:10px;
+color:#38bdf8;
+text-decoration:none;
+font-weight:bold;
+
+}
+
+@media(max-width:700px){
+
+.logo{
+
+font-size:25px;
+
+}
+
+.card h2{
+
+font-size:30px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="top">
+
+<div class="logo">
+
+👤 Fuqaro Kabineti
+
+</div>
+
+<button
+class="logout"
+onclick="logout()"
+>
+
+🚪 Chiqish
+
+</button>
+
+</div>
+
+<div class="cards">
+
+<div class="card">
+
+<h2 id="jami">0</h2>
+
+<p>📨 Mening arizalarim</p>
+
+</div>
+
+<div class="card">
+
+<h2 id="tasdiq">0</h2>
+
+<p>✅ Tasdiqlangan</p>
+
+</div>
+
+<div class="card">
+
+<h2 id="jarayon">0</h2>
+
+<p>⏳ Jarayonda</p>
+
+</div>
+
+</div>
+
+<div
+class="list"
+id="royxat"
+>
+
+</div>
+
+<script>
+
+const user =
+localStorage.getItem(
+'user'
+);
+
+if(!user){
+
+window.location.href =
+'/login.html';
+
+}
+
+function loadData(){
+
+fetch('/arizalar')
+
+.then(res=>res.json())
+
+.then(data=>{
+
+const myData =
+data.filter(
+a=>a.user===user
+);
+
+document.getElementById(
+'jami'
+).innerText =
+myData.length;
+
+document.getElementById(
+'tasdiq'
+).innerText =
+myData.filter(
+a=>a.status==='Tasdiqlandi'
+).length;
+
+document.getElementById(
+'jarayon'
+).innerText =
+myData.filter(
+a=>a.status==='Jarayonda'
+|| a.status==='pending'
+).length;
+
+let html='';
+
+myData.forEach(item=>{
+
+let statusClass='orange';
+
+if(item.status==='Tasdiqlandi'){
+
+statusClass='green';
+
+}
+
+if(item.status==='Rad etildi'){
+
+statusClass='red';
+
+}
+
+html += `
+
+<div class="item">
+
+<h2>
+
+📌 ${item.tur}
+
+</h2>
+
+<br>
+
+<p>
+
+👤 ${item.ism}
+
+</p>
+
+<br>
+
+<p class="${statusClass}">
+
+📊 ${item.status}
+
+</p>
+
+<br>
+
+<a
+href="/uploads/${item.file}"
+target="_blank"
+>
+
+📄 Hujjatni ko‘rish
+
+</a>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+'royxat'
+).innerHTML = html;
+
+});
+
+}
+
+function logout(){
+
+localStorage.removeItem(
+'user'
+);
+
+window.location.href =
+'/login.html';
+
+}
+
+loadData();
+
+</script>
+
+</body>
+</html>
