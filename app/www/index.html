@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Raqamli Mahalla AI</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#081120;
+color:white;
+padding:20px;
+}
+
+.container{
+max-width:430px;
+margin:auto;
+}
+
+.logo{
+text-align:center;
+margin-top:30px;
+margin-bottom:25px;
+}
+
+.logo h1{
+font-size:30px;
+margin-top:10px;
+}
+
+.logo p{
+color:#9fb3d1;
+margin-top:5px;
+}
+
+.card{
+background:#101d37;
+padding:22px;
+border-radius:24px;
+box-shadow:0 0 25px rgba(0,0,0,0.4);
+}
+
+.tabs{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+}
+
+.tabs button{
+flex:1;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#16294b;
+color:white;
+font-size:15px;
+cursor:pointer;
+}
+
+.tabs .active{
+background:linear-gradient(90deg,#0055ff,#00bfff);
+}
+
+input{
+width:100%;
+padding:16px;
+margin-top:14px;
+border:none;
+border-radius:14px;
+background:#16294b;
+color:white;
+font-size:15px;
+}
+
+.btn{
+width:100%;
+padding:16px;
+margin-top:18px;
+border:none;
+border-radius:16px;
+background:linear-gradient(90deg,#0055ff,#00bfff);
+color:white;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+}
+
+.ai-box{
+background:#16294b;
+padding:16px;
+border-radius:16px;
+margin-top:18px;
+}
+
+.status{
+background:#12351f;
+padding:14px;
+border-radius:14px;
+margin-top:15px;
+color:#63ff8a;
+font-weight:600;
+text-align:center;
+}
+
+.camera-box{
+margin-top:18px;
+display:grid;
+gap:12px;
+}
+
+.camera-btn{
+padding:15px;
+border:none;
+border-radius:14px;
+background:#16294b;
+color:white;
+font-size:15px;
+cursor:pointer;
+}
+
+.bottom{
+margin-top:22px;
+text-align:center;
+color:#8ca2c0;
+font-size:13px;
+}
+
+.user-box{
+margin-top:20px;
+background:#16294b;
+padding:16px;
+border-radius:16px;
+display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+
+<h1>Raqamli Mahalla AI</h1>
+
+<p>AI GOV Super App</p>
+
+</div>
+
+<div class="card">
+
+<div class="tabs">
+
+<button class="active">
+Kirish
+</button>
+
+<button>
+Ro'yxatdan o'tish
+</button>
+
+</div>
+
+<input type="text"
+id="fullname"
+placeholder="F.I.SH">
+
+<input type="text"
+id="passport"
+placeholder="Passport seriya">
+
+<input type="text"
+id="jshshir"
+placeholder="JSHSHIR">
+
+<input type="text"
+id="phoneNumber"
+placeholder="+998901234567">
+
+<button class="btn"
+onclick="sendCode()">
+
+📩 SMS kod yuborish
+
+</button>
+
+<input type="text"
+id="verificationCode"
+placeholder="SMS kod">
+
+<button class="btn"
+onclick="verifyCode()">
+
+✅ Kodni tasdiqlash
+
+</button>
+
+<div class="camera-box">
+
+<button class="camera-btn">
+
+📷 Kamerani yoqish
+
+</button>
+
+<button class="camera-btn">
+
+🪪 Passport OCR Scan
+
+</button>
+
+<button class="camera-btn">
+
+🤖 Face Verification AI
+
+</button>
+
+</div>
+
+<div class="ai-box">
+
+🤖 AI foydalanuvchini tekshirmoqda...
+
+</div>
+
+<div class="status"
+id="loginStatus">
+
+⏳ Login qilinmagan
+
+</div>
+
+<div class="user-box"
+id="userBox">
+
+<h3>✅ Foydalanuvchi tizimga kirdi</h3>
+
+<p id="userInfo"></p>
+
+<button class="btn"
+onclick="logoutUser()">
+
+🚪 Chiqish
+
+</button>
+
+</div>
+
+</div>
+
+<div class="bottom">
+
+© 2026 Raqamli Mahalla AI Platform
+
+</div>
+
+</div>
+
+<script src="cordova.js"></script>
+
+<script>
+
+window.onload = function(){
+
+const savedUser =
+localStorage.getItem("raqamliUser");
+
+if(savedUser){
+
+const user = JSON.parse(savedUser);
+
+document.getElementById("userBox")
+.style.display = "block";
+
+document.getElementById("userInfo")
+.innerHTML =
+
+"👤 " + user.fullname +
+"<br>🪪 " + user.passport +
+"<br>🆔 " + user.jshshir +
+"<br>📞 " + user.phone;
+
+document.getElementById("loginStatus")
+.innerHTML =
+"✅ Auto Login Successful";
+
+}
+
+};
+
+window.sendCode = function(){
+
+const phoneNumber =
+document.getElementById("phoneNumber").value;
+
+FirebasePlugin.verifyPhoneNumber(
+phoneNumber,
+30000,
+function(credential){
+
+window.verificationId =
+credential.verificationId;
+
+document.getElementById("loginStatus")
+.innerHTML =
+"📩 SMS yuborildi";
+
+alert("🔥 SMS yuborildi");
+
+},
+function(error){
+
+console.log(error);
+
+alert("❌ SMS yuborilmadi");
+
+}
+);
+
+};
+
+window.verifyCode = function(){
+
+const fullname =
+document.getElementById("fullname").value;
+
+const passport =
+document.getElementById("passport").value;
+
+const jshshir =
+document.getElementById("jshshir").value;
+
+const phone =
+document.getElementById("phoneNumber").value;
+
+const userData = {
+
+fullname:fullname,
+passport:passport,
+jshshir:jshshir,
+phone:phone
+
+};
+
+localStorage.setItem(
+"raqamliUser",
+JSON.stringify(userData)
+);
+
+document.getElementById("userBox")
+.style.display = "block";
+
+document.getElementById("userInfo")
+.innerHTML =
+
+"👤 " + fullname +
+"<br>🪪 " + passport +
+"<br>🆔 " + jshshir +
+"<br>📞 " + phone;
+
+document.getElementById("loginStatus")
+.innerHTML =
+"✅ Login successful";
+
+alert("🔥 Login successful");
+
+};
+
+window.logoutUser = function(){
+
+localStorage.removeItem(
+"raqamliUser"
+);
+
+location.reload();
+
+};
+
+</script>
+
+</body>
+</html>

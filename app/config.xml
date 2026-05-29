@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.raqamlimahalla.app"
+version="1.0.0"
+xmlns="http://www.w3.org/ns/widgets"
+xmlns:cdv="http://cordova.apache.org/ns/1.0">
+
+<name>Raqamli Mahalla</name>
+
+<description>
+Raqamli Mahalla mobil ilovasi
+</description>
+
+<author email="admin@raqamlimahalla.uz">
+Raqamli Mahalla
+</author>
+
+<content src="index.html" />
+
+<allow-navigation href="*" />
+<access origin="*" />
+
+<preference name="Fullscreen" value="true" />
+<preference name="Orientation" value="portrait" />
+<preference name="AndroidWindowSplashScreenAnimatedIcon" value="www/logo.png" />
+<preference name="AndroidWindowSplashScreenBackground" value="#0f172a" />
+
+<platform name="android">
+<icon src="www/logo.png" />
+</platform>
+
+</widget>

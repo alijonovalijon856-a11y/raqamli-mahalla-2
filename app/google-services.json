@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "835290649461",
+    "project_id": "raqamlimahalla-5c6bc",
+    "storage_bucket": "raqamlimahalla-5c6bc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835290649461:android:30ff8b740162b67817f93c",
+        "android_client_info": {
+          "package_name": "com.raqamlimahalla.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC34vwZPyZpmQUcamDvPq2XR8cknRpKTZU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
