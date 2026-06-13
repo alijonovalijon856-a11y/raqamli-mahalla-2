@@ -74,3 +74,15 @@ document.getElementById("loginStatus")
 }
 
 };
+document.addEventListener("deviceready", function(){
+
+console.log("DEVICE READY");
+
+console.log("FirebasexFirestore = ", window.FirebasexFirestore);
+
+alert(
+"FirebasexFirestore: " +
+(typeof window.FirebasexFirestore)
+);
+
+});

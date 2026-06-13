@@ -1,13 +1,32 @@
 {
   "project_info": {
-    "project_number": "835290649461",
-    "project_id": "raqamlimahalla-5c6bc",
-    "storage_bucket": "raqamlimahalla-5c6bc.firebasestorage.app"
+    "project_number": "275173738552",
+    "project_id": "raqamlimahalla-5c6bc-79346",
+    "storage_bucket": "raqamlimahalla-5c6bc-79346.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:835290649461:android:30ff8b740162b67817f93c",
+        "mobilesdk_app_id": "1:275173738552:android:3d8297d42956d6feb6becd",
+        "android_client_info": {
+          "package_name": "com.raqamli.mahalla"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrHmHaYv8UasOncRbQ-xY7a_9MNKFIegM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275173738552:android:2279c10a1a1e08d9b6becd",
         "android_client_info": {
           "package_name": "com.raqamlimahalla.app"
         }
@@ -15,7 +34,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC34vwZPyZpmQUcamDvPq2XR8cknRpKTZU"
+          "current_key": "AIzaSyBrHmHaYv8UasOncRbQ-xY7a_9MNKFIegM"
         }
       ],
       "services": {
