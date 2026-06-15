@@ -1,14 +1,18 @@
 document.addEventListener("deviceready", function(){
 
-alert("ADMIN PANEL READY");
+alert("ADMIN VERSION 1002");
 
 window.loadApplications = function(){
+
+alert("ADMIN LOAD ISHLADI");
 
 FirebasexFirestore.fetchFirestoreCollection(
 
 "applications",
 
 function(documents){
+
+alert("ADMIN COLLECTION YUKLANDI");
 
 let html = "";
 
@@ -18,16 +22,19 @@ const doc = documents[id];
 
 html +=
 "<div style='border:1px solid #ccc;padding:10px;margin:10px;border-radius:10px'>" +
-"<h3>" + (doc.title || "") + "</h3>" +
+"<h3>" + (doc.title || "Sarlavha yo'q") + "</h3>" +
 "<p>" + (doc.text || "") + "</p>" +
-"<p>📌 " + (doc.status || "Yuborildi") + "</p>" +
+"<p>📌 Holat: " + (doc.status || "Yuborildi") + "</p>" +
+"<button>Status o'zgartirish</button>" +
 "</div>";
 
 }
 
-document.getElementById(
-"adminApplications"
-).innerHTML = html;
+if(html === ""){
+html = "Arizalar topilmadi";
+}
+
+document.getElementById("adminApplications").innerHTML = html;
 
 },
 
