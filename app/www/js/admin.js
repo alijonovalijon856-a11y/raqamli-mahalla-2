@@ -1,14 +1,15 @@
 document.addEventListener("deviceready", function(){
 
-alert("ADMIN VERSION 1002");
+alert("ADMIN VERSION 1006");
 
 window.loadApplications = function(){
 
-alert("ADMIN LOAD ISHLADI");
+alert("ADMIN LOAD");
 
 FirebasexFirestore.fetchFirestoreCollection(
 
 "applications",
+[],
 
 function(documents){
 
@@ -25,7 +26,13 @@ html +=
 "<h3>" + (doc.title || "Sarlavha yo'q") + "</h3>" +
 "<p>" + (doc.text || "") + "</p>" +
 "<p>📌 Holat: " + (doc.status || "Yuborildi") + "</p>" +
-"<button>Status o'zgartirish</button>" +
+
+"<button onclick=\"changeStatus('" + id + "','Ko\\'rib chiqilmoqda')\">🟡 Ko'rib chiqilmoqda</button><br><br>" +
+
+"<button onclick=\"changeStatus('" + id + "','Tasdiqlandi')\">🟢 Tasdiqlandi</button><br><br>" +
+
+"<button onclick=\"changeStatus('" + id + "','Rad etildi')\">🔴 Rad etildi</button>" +
+
 "</div>";
 
 }
@@ -42,6 +49,39 @@ function(error){
 
 alert(
 "ADMIN ERROR:\n" +
+JSON.stringify(error)
+);
+
+}
+
+);
+
+};
+
+window.changeStatus = function(documentId, status){
+
+FirebasexFirestore.updateDocumentInFirestoreCollection(
+
+documentId,
+
+{
+    status: status
+},
+
+"applications",
+
+true,
+
+function(){
+
+alert("✅ Status yangilandi: " + status);
+
+},
+
+function(error){
+
+alert(
+"❌ STATUS ERROR:\n" +
 JSON.stringify(error)
 );
 

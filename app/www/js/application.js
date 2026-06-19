@@ -72,6 +72,7 @@ alert("Firestore collection o'qilmoqda");
 FirebasexFirestore.fetchFirestoreCollection(
 
 "applications",
+[],
 
 function(documents){
 
