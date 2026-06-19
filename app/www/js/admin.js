@@ -14,7 +14,42 @@ FirebasexFirestore.fetchFirestoreCollection(
 function(documents){
 
 alert("ADMIN COLLECTION YUKLANDI");
+let jami = 0;
+let tasdiqlandi = 0;
+let radEtildi = 0;
+let koribChiqilmoqda = 0;
 
+for(const id in documents){
+
+jami++;
+
+const status = documents[id].status || "";
+
+if(status === "Tasdiqlandi"){
+    tasdiqlandi++;
+}
+
+if(status === "Rad etildi"){
+    radEtildi++;
+}
+
+if(status === "Ko'rib chiqilmoqda"){
+    koribChiqilmoqda++;
+}
+
+}
+
+document.getElementById("statsPanel").innerHTML =
+
+"📊 <b>Statistika</b><br><br>" +
+
+"📄 Jami arizalar: <b>" + jami + "</b><br>" +
+
+"🟢 Tasdiqlangan: <b>" + tasdiqlandi + "</b><br>" +
+
+"🟡 Ko'rib chiqilmoqda: <b>" + koribChiqilmoqda + "</b><br>" +
+
+"🔴 Rad etilgan: <b>" + radEtildi + "</b>";
 let html = "";
 
 for(const id in documents){

@@ -89,7 +89,26 @@ html +=
 "<b>" + (doc.title || "Sarlavha yo'q") + "</b><br><br>" +
 (doc.text || "") +
 "<br><br>" +
-"📌 Holat: <b>" + (doc.status || "Noma'lum") + "</b>" +
+"<br><br>" +
+
+(
+doc.status === "Tasdiqlandi"
+?
+"🟢 <b style='color:green'>Tasdiqlandi</b>"
+:
+doc.status === "Rad etildi"
+?
+"🔴 <b style='color:red'>Rad etildi</b>"
+:
+doc.status === "Ko'rib chiqilmoqda"
+?
+"🟡 <b style='color:orange'>Ko'rib chiqilmoqda</b>"
+:
+"📌 <b>Yuborildi</b>"
+)
+
++
+"</div>";
 "</div>";
 
 
@@ -101,6 +120,7 @@ html = "Arizalar topilmadi";
 
 listElement.innerHTML = html;
 
+loadNotifications(documents);
 },
 
 function(error){
@@ -115,5 +135,50 @@ JSON.stringify(error)
 );
 
 };
+window.loadNotifications = function(documents){
 
+let html = "";
+
+for(const id in documents){
+
+const doc = documents[id];
+
+if(doc.status === "Tasdiqlandi"){
+
+html +=
+"<div style='padding:10px;margin:10px 0;border-radius:10px;border:1px solid green'>" +
+"🟢 Arizangiz tasdiqlandi" +
+"</div>";
+
+}
+
+if(doc.status === "Rad etildi"){
+
+html +=
+"<div style='padding:10px;margin:10px 0;border-radius:10px;border:1px solid red'>" +
+"🔴 Arizangiz rad etildi" +
+"</div>";
+
+}
+
+if(doc.status === "Ko\\'rib chiqilmoqda"){
+
+html +=
+"<div style='padding:10px;margin:10px 0;border-radius:10px;border:1px solid orange'>" +
+"🟡 Arizangiz ko'rib chiqilmoqda" +
+"</div>";
+
+}
+
+}
+
+if(html === ""){
+html = "Bildirishnomalar yo'q";
+}
+
+document.getElementById(
+"notificationsList"
+).innerHTML = html;
+
+};
 });
