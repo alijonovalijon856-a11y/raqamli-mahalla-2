@@ -41,15 +41,35 @@ if(status === "Ko'rib chiqilmoqda"){
 
 document.getElementById("statsPanel").innerHTML =
 
-"📊 <b>Statistika</b><br><br>" +
+"<h2 style='text-align:center'>📊 Dashboard</h2>" +
 
-"📄 Jami arizalar: <b>" + jami + "</b><br>" +
+"<div style='display:flex;flex-wrap:wrap;gap:10px'>" +
 
-"🟢 Tasdiqlangan: <b>" + tasdiqlandi + "</b><br>" +
+"<div style='flex:1;min-width:120px;background:#1e3a8a;padding:15px;border-radius:15px;text-align:center'>" +
+"<div style='font-size:30px'>📄</div>" +
+"<div>Jami</div>" +
+"<h2>" + jami + "</h2>" +
+"</div>" +
 
-"🟡 Ko'rib chiqilmoqda: <b>" + koribChiqilmoqda + "</b><br>" +
+"<div style='flex:1;min-width:120px;background:#166534;padding:15px;border-radius:15px;text-align:center'>" +
+"<div style='font-size:30px'>🟢</div>" +
+"<div>Tasdiqlangan</div>" +
+"<h2>" + tasdiqlandi + "</h2>" +
+"</div>" +
 
-"🔴 Rad etilgan: <b>" + radEtildi + "</b>";
+"<div style='flex:1;min-width:120px;background:#92400e;padding:15px;border-radius:15px;text-align:center'>" +
+"<div style='font-size:30px'>🟡</div>" +
+"<div>Ko'rib chiqilmoqda</div>" +
+"<h2>" + koribChiqilmoqda + "</h2>" +
+"</div>" +
+
+"<div style='flex:1;min-width:120px;background:#991b1b;padding:15px;border-radius:15px;text-align:center'>" +
+"<div style='font-size:30px'>🔴</div>" +
+"<div>Rad etilgan</div>" +
+"<h2>" + radEtildi + "</h2>" +
+"</div>" +
+
+"</div>";
 let html = "";
 
 for(const id in documents){
