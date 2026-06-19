@@ -125,5 +125,40 @@ JSON.stringify(error)
 );
 
 };
+window.adminLogin = function(){
 
+const username =
+document.getElementById(
+"adminUsername"
+).value;
+
+const password =
+document.getElementById(
+"adminPassword"
+).value;
+
+if(
+username === "admin" &&
+password === "12345"
+){
+
+document.getElementById(
+"loginBox"
+).style.display = "none";
+
+document.getElementById(
+"adminPanel"
+).style.display = "block";
+
+alert("✅ Admin muvaffaqiyatli kirdi");
+
+}else{
+
+alert(
+"❌ Login yoki parol noto'g'ri"
+);
+
+}
+
+};
 });
