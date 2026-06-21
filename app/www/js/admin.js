@@ -2,6 +2,74 @@ document.addEventListener("deviceready", function(){
 
 alert("ADMIN VERSION 1006");
 window.currentFilter = "all";
+window.loadUsers = function(){
+
+FirebasexFirestore.fetchFirestoreCollection(
+
+"users",
+[],
+
+function(documents){
+
+let html = "";
+
+let totalUsers = 0;
+
+for(const id in documents){
+
+totalUsers++;
+
+const user = documents[id];
+
+html +=
+
+"<div style='border:1px solid #ccc;padding:10px;margin:10px;border-radius:10px'>" +
+
+"<b>👤 " +
+(user.fullname || "") +
+"</b><br><br>" +
+
+"📞 " +
+(user.phone || "") +
+"<br>" +
+
+"🪪 " +
+(user.passport || "") +
+"<br>" +
+
+"🆔 " +
+(user.jshshir || "") +
+
+"</div>";
+
+}
+
+html =
+
+"<h3>👥 Jami foydalanuvchilar: " +
+totalUsers +
+"</h3>" +
+
+html;
+
+document.getElementById(
+"usersPanel"
+).innerHTML = html;
+
+},
+
+function(error){
+
+alert(
+"USERS ERROR:\n" +
+JSON.stringify(error)
+);
+
+}
+
+);
+
+};
 window.loadApplications = function(){
 
 alert("ADMIN LOAD");
