@@ -146,7 +146,27 @@ JSON.stringify(error)
 
 };
 window.adminLogin = function(){
+window.adminLogout = function(){
 
+document.getElementById(
+"adminPanel"
+).style.display = "none";
+
+document.getElementById(
+"loginBox"
+).style.display = "block";
+
+document.getElementById(
+"adminUsername"
+).value = "";
+
+document.getElementById(
+"adminPassword"
+).value = "";
+
+alert("🚪 Admin tizimdan chiqdi");
+
+};
 const username =
 document.getElementById(
 "adminUsername"
