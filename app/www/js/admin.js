@@ -71,11 +71,26 @@ document.getElementById("statsPanel").innerHTML =
 
 "</div>";
 let html = "";
-
+const searchText =
+document.getElementById(
+"searchInput"
+).value.toLowerCase();
 for(const id in documents){
 
 const doc = documents[id];
+const title =
+(doc.title || "").toLowerCase();
 
+const text =
+(doc.text || "").toLowerCase();
+
+if(
+searchText !== "" &&
+!title.includes(searchText) &&
+!text.includes(searchText)
+){
+continue;
+}
 html +=
 "<div style='border:1px solid #ccc;padding:10px;margin:10px;border-radius:10px'>" +
 "<h3>" + (doc.title || "Sarlavha yo'q") + "</h3>" +
