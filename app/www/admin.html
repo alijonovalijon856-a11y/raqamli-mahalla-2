@@ -51,7 +51,21 @@ type="text"
 id="searchInput"
 placeholder="🔍 Ariza qidirish..."
 style="margin-bottom:10px;">
+<button onclick="setFilter('all')">
+📋 Hammasi
+</button>
 
+<button onclick="setFilter('Tasdiqlandi')">
+🟢 Tasdiqlangan
+</button>
+
+<button onclick="setFilter('Ko\'rib chiqilmoqda')">
+🟡 Ko'rib chiqilmoqda
+</button>
+
+<button onclick="setFilter('Rad etildi')">
+🔴 Rad etilgan
+</button>
 <button onclick="loadApplications()">
 📥 Arizalarni yuklash
 </button>

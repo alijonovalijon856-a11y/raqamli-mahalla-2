@@ -1,7 +1,7 @@
 document.addEventListener("deviceready", function(){
 
 alert("ADMIN VERSION 1006");
-
+window.currentFilter = "all";
 window.loadApplications = function(){
 
 alert("ADMIN LOAD");
@@ -78,6 +78,13 @@ document.getElementById(
 for(const id in documents){
 
 const doc = documents[id];
+alert("Status: " + doc.status);
+if(
+window.currentFilter !== "all" &&
+doc.status !== window.currentFilter
+){
+continue;
+}
 const title =
 (doc.title || "").toLowerCase();
 
@@ -170,7 +177,13 @@ JSON.stringify(error)
 };
 window.adminLogin = function(){
 window.adminLogout = function(){
+window.setFilter = function(filter){
 
+window.currentFilter = filter;
+
+loadApplications();
+
+};
 document.getElementById(
 "adminPanel"
 ).style.display = "none";
