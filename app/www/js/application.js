@@ -1,5 +1,30 @@
 document.addEventListener("deviceready", function(){
+const fileInput =
+document.getElementById(
+"applicationFile"
+);
 
+if(fileInput){
+
+fileInput.addEventListener(
+"change",
+function(){
+
+if(this.files.length > 0){
+
+document.getElementById(
+"selectedFile"
+).innerHTML =
+
+"📎 " +
+this.files[0].name;
+
+}
+
+}
+);
+
+}
 alert("APPLICATION VERSION 4");
 
 window.sendApplication = function(){
@@ -11,11 +36,32 @@ if(title === "" || text === ""){
 alert("❌ Arizani to'ldiring");
 return;
 }
+const selectedFile =
+document.getElementById(
+"applicationFile"
+);
+
 const applicationData = {
+
     title: title,
     text: text,
+
+    fileName:
+
+    selectedFile.files.length > 0
+
+    ?
+
+    selectedFile.files[0].name
+
+    :
+
+    "Fayl biriktirilmagan",
+
     status: "Yuborildi",
+
     createdAt: new Date().toISOString()
+
 };
 alert(JSON.stringify(applicationData));
 

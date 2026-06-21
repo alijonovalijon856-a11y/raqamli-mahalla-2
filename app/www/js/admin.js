@@ -79,8 +79,16 @@ const doc = documents[id];
 html +=
 "<div style='border:1px solid #ccc;padding:10px;margin:10px;border-radius:10px'>" +
 "<h3>" + (doc.title || "Sarlavha yo'q") + "</h3>" +
+
 "<p>" + (doc.text || "") + "</p>" +
-"<p>📌 Holat: " + (doc.status || "Yuborildi") + "</p>" +
+
+"<p>📎 Hujjat: " +
+(doc.fileName || "Biriktirilmagan") +
+"</p>" +
+
+"<p>📌 Holat: " +
+(doc.status || "Yuborildi") +
+"</p>" +
 
 "<button onclick=\"changeStatus('" + id + "','Ko\\'rib chiqilmoqda')\">🟡 Ko'rib chiqilmoqda</button><br><br>" +
 
