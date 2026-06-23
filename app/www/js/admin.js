@@ -254,6 +254,13 @@ JSON.stringify(error)
 
 };
 window.setFilter = function(filter){
+
+window.currentFilter = filter;
+
+loadApplications();
+
+};
+
 window.showNewApplications = function(){
 
 window.currentFilter = "Yuborildi";
@@ -261,12 +268,6 @@ window.currentFilter = "Yuborildi";
 loadApplications();
 
 };
-window.currentFilter = filter;
-
-loadApplications();
-
-};
-
 window.adminLogout = function(){
 
 document.getElementById(
