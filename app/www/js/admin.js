@@ -86,7 +86,7 @@ let jami = 0;
 let tasdiqlandi = 0;
 let radEtildi = 0;
 let koribChiqilmoqda = 0;
-
+let yangiArizalar = 0;
 for(const id in documents){
 
 jami++;
@@ -104,12 +104,22 @@ if(status === "Rad etildi"){
 if(status === "Ko'rib chiqilmoqda"){
     koribChiqilmoqda++;
 }
-
+if(status === "Yuborildi"){
+    yangiArizalar++;
+}
 }
 
 document.getElementById("statsPanel").innerHTML =
 
-"<h2 style='text-align:center'>📊 Dashboard</h2>" +
+"<h2 style='text-align:center'>📊 Dashboard Pro 3.0</h2>" +
+
+"<div style='background:#b91c1c;padding:15px;border-radius:15px;margin-bottom:15px;text-align:center;font-size:20px;font-weight:bold'>" +
+
+"🔔 Yangi arizalar: " +
+
+yangiArizalar +
+
+"</div>" +
 
 "<div style='display:flex;flex-wrap:wrap;gap:10px'>" +
 
@@ -244,7 +254,13 @@ JSON.stringify(error)
 
 };
 window.setFilter = function(filter){
+window.showNewApplications = function(){
 
+window.currentFilter = "Yuborildi";
+
+loadApplications();
+
+};
 window.currentFilter = filter;
 
 loadApplications();
