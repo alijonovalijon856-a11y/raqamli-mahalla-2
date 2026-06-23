@@ -146,7 +146,7 @@ document.getElementById(
 for(const id in documents){
 
 const doc = documents[id];
-alert("Status: " + doc.status);
+
 if(
 window.currentFilter !== "all" &&
 doc.status !== window.currentFilter
@@ -243,8 +243,6 @@ JSON.stringify(error)
 );
 
 };
-window.adminLogin = function(){
-window.adminLogout = function(){
 window.setFilter = function(filter){
 
 window.currentFilter = filter;
@@ -252,6 +250,9 @@ window.currentFilter = filter;
 loadApplications();
 
 };
+
+window.adminLogout = function(){
+
 document.getElementById(
 "adminPanel"
 ).style.display = "none";
@@ -271,6 +272,9 @@ document.getElementById(
 alert("🚪 Admin tizimdan chiqdi");
 
 };
+
+window.adminLogin = function(){
+
 const username =
 document.getElementById(
 "adminUsername"
@@ -305,4 +309,5 @@ alert(
 }
 
 };
+
 });
