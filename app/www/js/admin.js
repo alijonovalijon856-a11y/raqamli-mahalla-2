@@ -70,6 +70,74 @@ JSON.stringify(error)
 );
 
 };
+window.loadLogs = function(){
+
+FirebasexFirestore.fetchFirestoreCollection(
+
+"logs",
+[],
+
+function(documents){
+
+let html = "";
+
+let totalLogs = 0;
+
+for(const id in documents){
+
+totalLogs++;
+
+const log = documents[id];
+
+html +=
+
+"<div style='border:1px solid #ccc;padding:10px;margin:10px;border-radius:10px'>" +
+
+"<b>📝 Status:</b> " +
+(log.status || "") +
+"<br><br>" +
+
+"<b>👤 Admin:</b> " +
+(log.admin || "") +
+"<br><br>" +
+
+"<b>🆔 Ariza ID:</b> " +
+(log.documentId || "") +
+"<br><br>" +
+
+"<b>⏰ Sana:</b> " +
+(log.createdAt || "") +
+
+"</div>";
+
+}
+
+html =
+
+"<h3>📜 Jami loglar: " +
+totalLogs +
+"</h3>" +
+
+html;
+
+document.getElementById(
+"logsPanel"
+).innerHTML = html;
+
+},
+
+function(error){
+
+alert(
+"LOGS ERROR:\n" +
+JSON.stringify(error)
+);
+
+}
+
+);
+
+};
 window.loadApplications = function(){
 
 alert("ADMIN LOAD");
@@ -223,6 +291,8 @@ JSON.stringify(error)
 
 window.changeStatus = function(documentId, status){
 
+alert("CHANGE STATUS BOSHLANDI");
+
 FirebasexFirestore.updateDocumentInFirestoreCollection(
 
 documentId,
@@ -237,7 +307,37 @@ true,
 
 function(){
 
+const logData = {
+
+documentId: documentId,
+status: status,
+admin: "admin",
+createdAt: new Date().toISOString()
+
+};
+
+FirebasexFirestore.addDocumentToFirestoreCollection(
+
+logData,
+"logs",
+true,
+
+function(){
+
 alert("✅ Status yangilandi: " + status);
+
+},
+
+function(error){
+
+alert(
+"LOG ERROR:\n" +
+JSON.stringify(error)
+);
+
+}
+
+);
 
 },
 
